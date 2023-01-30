@@ -2,25 +2,74 @@
   "name": "perkabodan",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
+  "typings": "types.d.ts",
+  "author": {
+    "name": "fadilmuh22"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/dom-mediacapture-record": "^1.0.14",
+    "@types/electron-devtools-installer": "^2.2.2",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-log": "^4.4.8",
+    "electron-reload": "^2.0.0-alpha.1",
+    "electron-updater": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "styled-components": "^5.3.6",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "react-start": "yarn compile | react-scripts start",
+    "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && electron build/main.js\"",
+    "winStart": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && yarn electron .\\build\\main.js\"",
+    "electron-build": "electron-builder",
+    "compile": "tsc -p tsconfig.electron.json",
+    "compile-watch": "tsc -p tsconfig.electron.json -w",
+    "build": "react-scripts build && yarn compile",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "e-dev": "electron build/main.js",
+    "eject": "react-scripts eject",
+    "electron-pack": "electron-builder --em.main=build/main.js"
+  },
+  "build": {
+    "icon": "/build/icon.png",
+    "appId": "com.example.electron-cra",
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage"
+        }
+      ]
+    },
+    "win": {
+      "publish": [
+        "github"
+      ],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": "ia32"
+        }
+      ]
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +88,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.26",
+    "concurrently": "^7.6.0",
+    "cross-env": "^7.0.3",
+    "electron": "^22.1.0",
+    "electron-builder": "^23.6.0",
+    "wait-on": "^7.0.1"
   }
 }

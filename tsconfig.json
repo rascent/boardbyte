@@ -6,6 +6,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+        "dom-mediacapture-record",
+        "node",
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,7 +22,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "downlevelIteration": true,
+    "jsx": "react-jsx",
+    "rootDir": "./src",
+    "typeRoots": [
+      "src/types"
+    ]
   },
   "include": [
     "src"
