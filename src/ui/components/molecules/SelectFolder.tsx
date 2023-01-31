@@ -1,8 +1,9 @@
 import FolderIcon from 'assets/icons/folder.svg';
 import styled from 'styled-components';
-import { MyIcon } from './MyIcon';
+import { MyIcon } from '../atoms/MyIcon';
+const { myIpcRenderer } = window;
 
-const Container = styled.p`
+const Container = styled.div`
   display: flex;
   align-items: center;
   margin-right: 12px;
@@ -19,8 +20,12 @@ const SelectText = styled.p`
 `;
 
 export const SelectFolder = () => {
+  const handlePathSelection = () => {
+    myIpcRenderer.invoke('APP_showDialog');
+  };
+
   return (
-    <Container>
+    <Container onClick={handlePathSelection}>
       <MyIcon icon={FolderIcon} size={19} alt="select-folder" />
       <SelectText>Select folder</SelectText>
     </Container>

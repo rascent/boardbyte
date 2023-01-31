@@ -1,7 +1,7 @@
 import ChevronRight from 'assets/icons/chevron-right.svg';
 import styled from 'styled-components';
-import { MyIcon } from './MyIcon';
-import { Row } from './Row';
+import { MyIcon } from '../atoms/MyIcon';
+import { Row } from '../atoms/Row';
 import { SelectFolder } from './SelectFolder';
 
 const FolderText = styled.p`

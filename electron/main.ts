@@ -51,6 +51,7 @@ export default class Main {
       minHeight: 50,
       frame: isDev ? true : false,
       webPreferences: {
+        webSecurity: false,
         nodeIntegration: false,
         contextIsolation: true,
         enableRemoteModule: false,
@@ -226,8 +227,8 @@ export default class Main {
           exists = true;
           try {
             globalShortcut.unregister(bind.key);
-          } catch {
-            console.log('Failed to set keybind');
+          } catch (e) {
+            console.log('Failed to set keybind', e);
           }
           bind.key = key;
         }
