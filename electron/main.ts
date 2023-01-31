@@ -45,9 +45,9 @@ export default class Main {
 
   private static onReady() {
     Main.mainWindow = new Main.BrowserWindow({
-      width: 1460,
-      height: 1000,
-      minWidth: 760,
+      width: 1366,
+      height: 768,
+      minWidth: 768,
       minHeight: 50,
       frame: isDev ? true : false,
       webPreferences: {
@@ -69,20 +69,16 @@ export default class Main {
     });
 
     // ? Hot Reloading
-    // if (isDev) {
-    //   require('electron-reload')(__dirname, {
-    //     electron: path.join(
-    //       __dirname,
-    //       '..',
-    //       '..',
-    //       'node_modules',
-    //       '.bin',
-    //       'electron'
-    //     ),
-    //     forceHardReset: true,
-    //     hardResetMethod: 'exit',
-    //   });
-    // }
+    if (isDev) {
+      try {
+        require('electron-reloader')(module, {
+          debug: true,
+          watchRenderer: true,
+        });
+      } catch (_) {
+        console.log('Error reloader');
+      }
+    }
 
     // ? DevTools
     installExtension(REACT_DEVELOPER_TOOLS)

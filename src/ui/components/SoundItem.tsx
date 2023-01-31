@@ -1,12 +1,9 @@
 import styled from 'styled-components';
 
-import PauseIcon from '../assets/icons/pause.svg';
-import PlayIcon from '../assets/icons/play.svg';
-
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+import PauseIcon from 'assets/icons/pause.svg';
+import PlayIcon from 'assets/icons/play.svg';
+import { Column } from './Column';
+import { MyIcon } from './MyIcon';
 
 const Container = styled.div`
   padding: 52px 68px;
@@ -61,10 +58,9 @@ export const SoundItem: React.FC<SoundItemProps> = (props: SoundItemProps) => {
             : 'rgba(217, 217, 217, 0.34)',
         }}
       >
-        <img
-          src={!props.isPlaying ? PlayIcon : PauseIcon}
-          width={40}
-          height={40}
+        <MyIcon
+          icon={!props.isPlaying ? PlayIcon : PauseIcon}
+          size={40}
           alt="play-pause"
         />
       </Container>

@@ -1,5 +1,4 @@
-import './App.css';
-import { MainGrid } from './MainGrid';
+import { MainGrid } from 'ui/components/MainGrid';
 
 const App: React.FC = () => {
   return (
