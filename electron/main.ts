@@ -10,6 +10,7 @@ import {
 } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import { autoUpdater } from 'electron-updater';
@@ -45,11 +46,11 @@ export default class Main {
 
   private static onReady() {
     Main.mainWindow = new Main.BrowserWindow({
+      frame: isDev ? true : false,
       width: 1366,
       height: 768,
       minWidth: 768,
       minHeight: 50,
-      frame: isDev ? true : false,
       webPreferences: {
         webSecurity: false,
         nodeIntegration: false,
@@ -57,6 +58,7 @@ export default class Main {
         enableRemoteModule: false,
         preload: path.join(__dirname, 'preload.js'),
       },
+      backgroundColor: '#fff',
     });
     Main.mainWindow.loadURL(
       isDev
@@ -82,7 +84,7 @@ export default class Main {
     }
 
     // ? DevTools
-    installExtension(REACT_DEVELOPER_TOOLS)
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
       .then((name) => console.log(`Added Extension:  ${name}`))
       .catch((err) => console.log('An error occurred: ', err));
 
@@ -180,27 +182,29 @@ export default class Main {
   private static listenerFileSelection() {
     // ? For selecting directory
     ipcMain.handle('APP_showDialog', (event, ...args) => {
-      let dir: string = '';
+      return new Promise((resolve, reject) => {
+        dialog
+          .showOpenDialog({ properties: ['openDirectory'] })
+          .then((result) => {
+            let dir = result.filePaths[0];
+            if (dir) {
+              this.listAudioFiles(dir).then(([paths, files]) => {
+                let load = {
+                  dir: dir,
+                  paths: paths,
+                  fileNames: files,
+                };
 
-      dialog
-        .showOpenDialog({ properties: ['openDirectory'] })
-        .then((result) => {
-          dir = result.filePaths[0];
-          if (dir) {
-            this.listAudioFiles(dir).then(([paths, files]) => {
-              let load = {
-                dir: dir,
-                paths: paths,
-                fileNames: files,
-              };
+                resolve(load);
 
-              event.sender.send('APP_listedFiles', load);
-            });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+                event.sender.send('APP_listedFiles', load);
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
     });
   }
 
@@ -221,6 +225,8 @@ export default class Main {
 
     ipcMain.on('APP_setkey', (event, key: string, title: string, ...args) => {
       let exists = false;
+
+      if (key === '') return;
 
       for (let bind of bindings) {
         if (bind.name === title) {

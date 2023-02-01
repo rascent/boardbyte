@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 * {
   margin: 0;
+  font-family: 'Poppins', sans-serif, -apple-system;
 }
 
 html {
@@ -7,8 +10,5 @@ html {
 }
 
 body {
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-  font-family: 'Poppins', sans-serif, -apple-system;
-  background-color: #292B30;
+  background-color: #292b30;
 }

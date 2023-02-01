@@ -1,8 +1,11 @@
+import SettingOutput from 'assets/icons/setting-output.svg';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
+import { MyIcon } from '../atoms/MyIcon';
 import { Row } from '../atoms/Row';
 import { BreadCrumb } from '../molecules/BreadCrumb';
+import { DropdownSelect, SelectOption } from '../molecules/DropdownSelect';
 import { NewRecordButton } from '../molecules/NewRecordButton';
 import { ISoundItem, SoundItem } from '../molecules/SoundItem';
 
@@ -21,6 +24,12 @@ const MainGridAction = styled.div`
   margin: 24px 42px 32px 42px;
 `;
 
+const TopSetting = styled(Row)`
+  gap: 16px;
+  padding: 32px 42px;
+  border-bottom: 1px solid #494d54;
+`;
+
 type MainGridProps = {
   sounds: ISoundItem[];
   outputs?: MediaDeviceInfo[];
@@ -32,51 +41,36 @@ export const MainGrid: React.FC<MainGridProps> = ({
   outputs,
   onSelected,
 }: MainGridProps) => {
-  const [playing, setPlaying] = useState<string>();
   const [selectedPrimaryOutput, setSelectedPrimaryOutput] =
-    useState<string>('default');
+    useState<SelectOption>({ label: 'Default Ouput', deviceId: 'default' });
   const [selectedSecondaryOutput, setSelectedSecondaryOutput] =
-    useState<string>('default');
+    useState<SelectOption>({ label: 'Default Output', deviceId: 'default' });
 
-  const handlePrimaryOutputChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedPrimaryOutput(event.currentTarget.value);
-    localStorage.setItem('primary_output', event.currentTarget.value);
+  const handlePrimaryOutputChange = (value: SelectOption) => {
+    setSelectedPrimaryOutput(value);
+    localStorage.setItem('primary_output', value.deviceId);
   };
 
-  const handleSecondaryOutputChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedSecondaryOutput(event.currentTarget.value);
-    localStorage.setItem('secondary_output', event.currentTarget.value);
-  };
-
-  const playSound = (source: string) => {
-    setPlaying(source);
+  const handleSecondaryOutputChange = (value: SelectOption) => {
+    setSelectedSecondaryOutput(value);
+    localStorage.setItem('secondary_output', value.deviceId);
   };
 
   return (
     <Column>
-      <Row>
-        <select onChange={handlePrimaryOutputChange}>
-          {outputs &&
-            outputs.map((output, index) => (
-              <option key={index} value={output.deviceId}>
-                {output.label}
-              </option>
-            ))}
-        </select>
-
-        <select onChange={handleSecondaryOutputChange}>
-          {outputs &&
-            outputs.map((output, index) => (
-              <option key={index} value={output.deviceId}>
-                {output.label}
-              </option>
-            ))}
-        </select>
-      </Row>
+      <TopSetting>
+        <MyIcon icon={SettingOutput} size={24} alt="setting-output" />
+        <DropdownSelect
+          selectedValue={selectedPrimaryOutput}
+          onChange={handlePrimaryOutputChange}
+          options={outputs}
+        />
+        <DropdownSelect
+          selectedValue={selectedSecondaryOutput}
+          onChange={handleSecondaryOutputChange}
+          options={outputs}
+        />
+      </TopSetting>
 
       <MainGridAction>
         <BreadCrumb />
@@ -87,10 +81,11 @@ export const MainGrid: React.FC<MainGridProps> = ({
         {sounds.map((sound, index) => (
           <SoundItem
             key={index}
-            outputs={[selectedPrimaryOutput, selectedSecondaryOutput]}
+            outputs={[
+              selectedPrimaryOutput.deviceId,
+              selectedSecondaryOutput.deviceId,
+            ]}
             sound={sound}
-            isPlaying={playing === sound.source}
-            onPlay={playSound}
             onSelected={onSelected}
           />
         ))}

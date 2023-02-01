@@ -4,6 +4,7 @@ import { ISoundItem } from 'ui/components/molecules/SoundItem';
 import { Row } from '../components/atoms/Row';
 import { MainGrid } from '../components/organisms/MainGrid';
 import { SideNav } from '../components/organisms/SideNav';
+
 const { myIpcRenderer } = window;
 
 const AppContainer = styled.div`
@@ -29,16 +30,16 @@ const App: React.FC = () => {
     myIpcRenderer.on('APP_listedFiles', (result) => {
       const soundsString = localStorage.getItem('sounds');
 
-      let soundsList: ISoundItem[] = soundsString
+      let soundList: ISoundItem[] = soundsString
         ? JSON.parse(soundsString)
         : [];
 
       (result.paths as []).forEach((_, index) => {
         if (
-          soundsList.length === 0 ||
-          soundsList.findIndex((s) => s.source === result.paths[index]) === -1
+          soundList.length === 0 ||
+          soundList.findIndex((s) => s.source === result.paths[index]) === -1
         ) {
-          soundsList.push({
+          soundList.push({
             name: result.fileNames[index],
             source: result.paths[index],
             keybind: '',
@@ -48,11 +49,40 @@ const App: React.FC = () => {
         }
       });
 
-      setSounds(soundsList);
-      localStorage.setItem('dir', result.dir);
-      // localStorage.setItem('sounds', JSON.stringify(soundsList));
+      const soundPromises = soundList.map(async (s) => {
+        let response = null;
+
+        try {
+          response = await fetch(s.source);
+        } catch {}
+
+        return response && s;
+      });
+
+      Promise.all(soundPromises).then((data) => {
+        const sortedSoundList = (
+          data.filter((x) => {
+            const isNotNull = x != null;
+            if (isNotNull) {
+              myIpcRenderer.send('APP_setkey', x.keybind, x.name);
+            }
+            return isNotNull;
+          }) as ISoundItem[]
+        ).sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+
+        setSounds(sortedSoundList);
+        localStorage.setItem('dir', result.dir);
+        localStorage.setItem('sounds', JSON.stringify(sortedSoundList));
+      });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSaveSound = (sound: ISoundItem) => {
@@ -71,6 +101,11 @@ const App: React.FC = () => {
       if (dir) myIpcRenderer.send('APP_listFiles', dir);
       return modifiedSounds;
     });
+
+    setSelectedSound(undefined);
+    setTimeout(() => {
+      setSelectedSound(sound);
+    }, 1);
   };
 
   return (

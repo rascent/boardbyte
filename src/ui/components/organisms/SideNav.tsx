@@ -11,6 +11,8 @@ import { KeybindInput } from '../molecules/KeybindInput';
 import { ISoundItem } from '../molecules/SoundItem';
 import { VolumeSlider } from '../molecules/VolumeSlider';
 
+const { myIpcRenderer } = window;
+
 const Container = styled.div`
   width: 322px;
   height: 100vh;
@@ -42,22 +44,24 @@ export const SideNav: React.FC<SideNavProps> = ({
   sound,
   onSaveSound,
 }: SideNavProps) => {
+  const [keybind, setKeybind] = useState('');
   const [volume, setVolume] = useState(50);
   const [virtualVolume, setVirtualVolume] = useState(50);
-  const [keybind, setKeybind] = useState('');
 
-  useEffect(() => {
-    if (sound) {
-      setVolume(sound.volume);
-      setVirtualVolume(sound.virtualVolume);
-      setKeybind(sound.keybind);
-    }
-  }, [sound]);
+  const registerKeybind = () => {
+    myIpcRenderer.send('APP_setkey', keybind, sound?.name);
+  };
+
+  const unregisterKeybind = () => {
+    myIpcRenderer.send('APP_setkey', '', sound?.name);
+  };
 
   const handleSaveValue = () => {
+    registerKeybind();
+
     onSaveSound({
-      name: sound?.name!,
-      source: sound?.source!,
+      name: sound!.name,
+      source: sound!.source,
       keybind: keybind,
       volume: volume,
       virtualVolume: virtualVolume,
@@ -65,28 +69,28 @@ export const SideNav: React.FC<SideNavProps> = ({
   };
 
   const handleResetValue = () => {
-    setKeybind('');
-    setVolume(0);
-    setVirtualVolume(0);
+    setKeybind(sound!.keybind);
+    setVolume(sound!.volume);
+    setVirtualVolume(sound!.virtualVolume);
 
     onSaveSound({
-      name: sound?.name!,
-      source: sound?.source!,
-      keybind: '',
-      volume: 0,
-      virtualVolume: 0,
+      name: sound!.name,
+      source: sound!.source,
+      keybind: sound!.keybind,
+      volume: sound!.volume,
+      virtualVolume: sound!.virtualVolume,
     });
   };
 
   const handleResetDefaultValue = () => {
-    setKeybind('Control+Alt+1');
+    setKeybind('');
     setVolume(50);
     setVirtualVolume(50);
 
     onSaveSound({
-      name: sound?.name!,
-      source: sound?.source!,
-      keybind: 'Control+Alt+1',
+      name: sound!.name,
+      source: sound!.source,
+      keybind: '',
       volume: 50,
       virtualVolume: 50,
     });
@@ -101,6 +105,14 @@ export const SideNav: React.FC<SideNavProps> = ({
       sound.virtualVolume !== virtualVolume
     );
   };
+
+  useEffect(() => {
+    if (sound) {
+      setVolume(sound.volume);
+      setVirtualVolume(sound.virtualVolume);
+      setKeybind(sound.keybind);
+    }
+  }, [sound]);
 
   return (
     <Container>
@@ -131,13 +143,13 @@ export const SideNav: React.FC<SideNavProps> = ({
         />
 
         <Spacer height={32} />
-
         <KeybindInput
           name={sound?.name ?? ''}
-          keybind={keybind}
-          onChange={sound ? setKeybind : (value) => {}}
+          keybind={sound?.keybind ?? ''}
+          setKeybind={(value) => setKeybind(value)}
+          registerKeybind={registerKeybind}
+          unregisterKeybind={unregisterKeybind}
         />
-
         <Spacer height={61} />
 
         <Column style={{ padding: '0px 27px', gap: 13 }}>

@@ -1,6 +1,6 @@
 import PauseIcon from 'assets/icons/pause.svg';
 import PlayIcon from 'assets/icons/play.svg';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { MyIcon } from '../atoms/MyIcon';
@@ -11,6 +11,8 @@ const Container = styled.div`
   cursor: pointer;
   padding: 52px 68px;
   border-radius: 18px;
+
+  width: fit-content;
 
   display: flex;
   justify-content: center;
@@ -24,6 +26,12 @@ const CursorContainer = styled.div`
 const Title = styled.p`
   margin-top: 19px;
   margin-bottom: 1px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  max-width: 176px;
 
   font-weight: bold;
   font-size: 16px;
@@ -49,19 +57,16 @@ export interface ISoundItem {
 
 type SoundItemProps = {
   outputs: string[];
-  isPlaying: boolean;
   sound: ISoundItem;
-  onPlay(source: string): any;
   onSelected(sound: ISoundItem): any;
 };
 
 export const SoundItem: React.FC<SoundItemProps> = ({
   outputs,
-  isPlaying,
   sound,
-  onPlay,
   onSelected,
 }: SoundItemProps) => {
+  const [isPlaying, setIsPlaying] = useState(false);
   const removeListenerRef = useRef<Function>();
   const primaryAudioRef = useRef<ExtendedAudioElement>(null);
   const secondaryAudioRef = useRef<ExtendedAudioElement>(null);
@@ -76,11 +81,11 @@ export const SoundItem: React.FC<SoundItemProps> = ({
 
   const play = () => {
     if (primaryAudioRef.current?.paused) {
-      onPlay(sound.source);
+      setIsPlaying(true);
       primaryAudioRef.current?.play();
       secondaryAudioRef.current?.play();
     } else {
-      onPlay('');
+      setIsPlaying(false);
       primaryAudioRef.current?.pause();
       primaryAudioRef.current!.currentTime = 0;
       secondaryAudioRef.current?.pause();
@@ -108,7 +113,6 @@ export const SoundItem: React.FC<SoundItemProps> = ({
     sound.name &&
       sound.keybind &&
       localStorage.setItem(sound.name, sound.keybind);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sound]);
 
   useEffect(() => {
@@ -117,6 +121,13 @@ export const SoundItem: React.FC<SoundItemProps> = ({
     );
     secondaryAudioRef.current!.volume = Math.exp(
       (Math.log(sound.virtualVolume / 100) / Math.log(10)) * 4
+    );
+
+    primaryAudioRef.current!.addEventListener('ended', () =>
+      setIsPlaying(false)
+    );
+    secondaryAudioRef.current!.addEventListener('ended', () =>
+      setIsPlaying(false)
     );
   }, [sound]);
 
@@ -129,7 +140,7 @@ export const SoundItem: React.FC<SoundItemProps> = ({
           play();
         }}
         style={{
-          backgroundColor: isPlaying ? '#DFDFDF' : 'rgba(217, 217, 217, 0.34)',
+          backgroundColor: isPlaying ? '#633CD5' : '#7E8185',
         }}
       >
         <MyIcon
@@ -144,7 +155,9 @@ export const SoundItem: React.FC<SoundItemProps> = ({
         }}
       >
         <Title>{sound.name}</Title>
-        <Subtitle>{sound.keybind}</Subtitle>
+        <Subtitle>
+          {sound.keybind === '' ? '<Add keybind>' : sound.keybind}
+        </Subtitle>
       </CursorContainer>
     </Column>
   );

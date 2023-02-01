@@ -1,5 +1,5 @@
 import KeyboardIcon from 'assets/icons/keyboard.svg';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { InputLabel } from '../atoms/InputLabel';
@@ -7,13 +7,11 @@ import { MyIcon } from '../atoms/MyIcon';
 
 import { Spacer } from '../atoms/Spacer';
 
-const { myIpcRenderer } = window;
-
 const KeybindButton = styled.button`
   display: flex;
   align-items: center;
 
-  padding: 14px;
+  padding: 9px;
   border: none;
   border-radius: 4px;
   background-color: #494d54;
@@ -35,50 +33,77 @@ const KeybindText = styled.p`
 type KeybindInputProps = {
   name: string;
   keybind: string;
-  onChange(value: string): any;
+  setKeybind(value: string): any;
+  registerKeybind(): any;
+  unregisterKeybind(): any;
 };
 
 export const KeybindInput: React.FC<KeybindInputProps> = ({
   name,
   keybind,
-  onChange,
+  setKeybind,
+  registerKeybind,
+  unregisterKeybind,
 }: KeybindInputProps) => {
-  let keys = useRef<string[]>([]);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [keys, setKeys] = useState<string[]>([]);
   const [buttonFocus, setButtonFocus] = useState<boolean>(false);
 
-  const setKey = () => {
-    let shortcutString = keys.current.join('+');
-    myIpcRenderer.send('APP_setkey', shortcutString, name);
-    onChange(shortcutString);
+  const addKey = (value: string) => {
+    const newKeys = [...keys, value];
+    setKeys(newKeys);
+    setKeybind(newKeys.join('+'));
   };
 
-  const clearKey = () => {
-    keys.current = [];
-    onChange('');
-    myIpcRenderer.send('APP_setkey', '', name);
+  const clearKeys = (value?: string) => {
+    setKeys(value === undefined ? [] : value.split('+'));
+    setKeybind(value ?? '');
+  };
+
+  const deleteKeybind = () => {
+    clearKeys();
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (!buttonFocus) return;
 
+    const keyLength = keys.length;
+
     if (event.key === 'Escape') {
-      clearKey();
+      clearKeys(keybind);
       return;
     }
 
-    if (keys.current.length === 3) {
-      clearKey();
-    }
-
-    if (keys.current.length < 3) {
-      keys.current.push(event.key);
-
-      if (keys.current.length === 3) {
-        setKey();
-        setButtonFocus(false);
-      }
+    if (keyLength < 3) {
+      if (keys.includes(event.key)) return;
+      addKey(event.key);
+    } else {
+      setKeys([event.key]);
+      setKeybind(event.key);
     }
   };
+
+  const toggleButtonFocus = (focused: boolean) => {
+    if (!focused) {
+      clearKeys();
+      unregisterKeybind();
+    } else {
+      clearKeys(keybind);
+      registerKeybind();
+    }
+
+    setButtonFocus(!focused);
+  };
+
+  useEffect(() => {
+    if (name === '') return;
+    toggleButtonFocus(true);
+    setKeys(keybind.split('+'));
+  }, [name]);
+
+  useEffect(() => {
+    setKeys(keybind.split('+'));
+  }, [keybind]);
 
   return (
     <Column
@@ -87,21 +112,18 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
         marginRight: 27,
       }}
     >
-      <InputLabel>Keybind</InputLabel>
+      <InputLabel style={{ cursor: 'no-drop' }} onClick={deleteKeybind}>
+        Keybind
+      </InputLabel>
       <Spacer height={12} />
       <KeybindButton
+        ref={buttonRef}
         disabled={name === ''}
         style={{ backgroundColor: buttonFocus ? '#494d5499' : '#494d54' }}
-        onClick={() => {
-          setButtonFocus((value) => !value);
-        }}
-        onDoubleClick={() => {
-          clearKey();
-          setButtonFocus(true);
-        }}
+        onClick={() => toggleButtonFocus(buttonFocus)}
         onKeyDown={handleKeyDown}
       >
-        <KeybindText>{keybind}</KeybindText>
+        <KeybindText>{keys.join('+')}</KeybindText>
         <MyIcon icon={KeyboardIcon} size={24} alt="input-keybind" />
       </KeybindButton>
     </Column>

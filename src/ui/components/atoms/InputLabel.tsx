@@ -5,4 +5,6 @@ export const InputLabel = styled.p`
   font-size: 12px;
   line-height: 15px;
   color: #ffffff;
+
+  width: fit-content;
 `;
