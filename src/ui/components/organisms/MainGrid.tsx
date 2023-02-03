@@ -27,6 +27,7 @@ const MainGridAction = styled.div`
 const TopSetting = styled(Row)`
   gap: 16px;
   padding: 32px 42px;
+  width: 100%;
   border-bottom: 1px solid #494d54;
 `;
 
@@ -57,7 +58,7 @@ export const MainGrid: React.FC<MainGridProps> = ({
   };
 
   return (
-    <Column>
+    <Column style={{ width: '76%' }}>
       <TopSetting>
         <MyIcon icon={SettingOutput} size={24} alt="setting-output" />
         <DropdownSelect

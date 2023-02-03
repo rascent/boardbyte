@@ -7,14 +7,18 @@ import { MyIcon } from '../atoms/MyIcon';
 
 const { myIpcRenderer } = window;
 
-const Container = styled.div`
+const Wrapper = styled(Column)`
+  align-items: center;
+  width: fit-content;
+`;
+
+const PlayContainer = styled.div`
   cursor: pointer;
-  padding: 52px 68px;
+  padding: 43px 59px;
   border-radius: 18px;
 
-  width: fit-content;
-
   display: flex;
+  width: fit-content;
   justify-content: center;
   align-items: center;
 `;
@@ -31,7 +35,7 @@ const Title = styled.p`
   text-overflow: ellipsis;
   overflow: hidden;
 
-  max-width: 176px;
+  max-width: 156px;
 
   font-weight: bold;
   font-size: 16px;
@@ -132,10 +136,10 @@ export const SoundItem: React.FC<SoundItemProps> = ({
   }, [sound]);
 
   return (
-    <Column>
+    <Wrapper>
       <audio ref={primaryAudioRef} src={sound.source} preload="auto" />
       <audio ref={secondaryAudioRef} src={sound.source} preload="auto" />
-      <Container
+      <PlayContainer
         onClick={() => {
           play();
         }}
@@ -148,7 +152,7 @@ export const SoundItem: React.FC<SoundItemProps> = ({
           size={40}
           alt="play-pause"
         />
-      </Container>
+      </PlayContainer>
       <CursorContainer
         onClick={() => {
           onSelected(sound);
@@ -159,6 +163,6 @@ export const SoundItem: React.FC<SoundItemProps> = ({
           {sound.keybind === '' ? '<Add keybind>' : sound.keybind}
         </Subtitle>
       </CursorContainer>
-    </Column>
+    </Wrapper>
   );
 };

@@ -14,7 +14,7 @@ import { VolumeSlider } from '../molecules/VolumeSlider';
 const { myIpcRenderer } = window;
 
 const Container = styled.div`
-  width: 322px;
+  width: 24%;
   height: 100vh;
 
   display: flex;
