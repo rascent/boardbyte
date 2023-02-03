@@ -1,11 +1,10 @@
-import MusicIcon from 'assets/icons/music.svg';
-import PencilIcon from 'assets/icons/pencil.svg';
+import { MusicIcon, PencilIcon } from 'assets/icons/Icons';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Button, ButtonType } from '../atoms/Button';
 import { Column } from '../atoms/Column';
-import { MyIcon } from '../atoms/MyIcon';
 import { Row } from '../atoms/Row';
+import { SideNavPlaceholder } from '../atoms/SideNavPlaceholder';
 import { Spacer } from '../atoms/Spacer';
 import { KeybindInput } from '../molecules/KeybindInput';
 import { ISoundItem } from '../molecules/SoundItem';
@@ -13,16 +12,26 @@ import { VolumeSlider } from '../molecules/VolumeSlider';
 
 const { myIpcRenderer } = window;
 
-const Container = styled.div`
+const Wrapper = styled.div`
   width: 24%;
   height: 100vh;
+  position: relative;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
+  position: absolute;
+  top: 0;
+
   background-color: #202123;
   padding-top: 52px;
+  transition: all 1s ease;
 `;
 
 const Title = styled.div`
@@ -35,18 +44,16 @@ const Title = styled.div`
   color: #f8f8f8;
 `;
 
-type SideNavProps = {
+interface SideNavProps {
   sound?: ISoundItem;
   onSaveSound(sound: ISoundItem): any;
-};
+}
 
-export const SideNav: React.FC<SideNavProps> = ({
-  sound,
-  onSaveSound,
-}: SideNavProps) => {
+export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
   const [keybind, setKeybind] = useState('');
   const [volume, setVolume] = useState(50);
   const [virtualVolume, setVirtualVolume] = useState(50);
+  const [transform, setTransform] = useState('translateX(100%)');
 
   const registerKeybind = () => {
     myIpcRenderer.send('APP_setkey', keybind, sound?.name);
@@ -108,76 +115,86 @@ export const SideNav: React.FC<SideNavProps> = ({
 
   useEffect(() => {
     if (sound) {
+      setTransform('translateX(0)');
       setVolume(sound.volume);
       setVirtualVolume(sound.virtualVolume);
       setKeybind(sound.keybind);
+    } else {
+      setTransform('translateX(100%)');
     }
   }, [sound]);
 
   return (
-    <Container>
-      <MyIcon icon={MusicIcon} size={92} alt="music-icon" />
-      <Row style={{ marginTop: 24 }}>
-        <Title>{sound?.name ?? '<Sound Name>'}</Title>
-        <MyIcon icon={PencilIcon} size={16} alt="edit-name" />
-      </Row>
-
-      <Column
+    <Wrapper>
+      <SideNavPlaceholder opacity={sound === undefined ? 1 : 0} />
+      <Container
         style={{
-          width: '100%',
-          marginTop: 55,
+          transform: transform,
         }}
       >
-        <VolumeSlider
-          title="Sound Volume"
-          volume={volume}
-          onChangeValue={setVolume}
-        />
+        <MusicIcon />
+        <Row style={{ marginTop: 24 }}>
+          <Title>{sound?.name ?? '<Sound Name>'}</Title>
+          <PencilIcon />
+        </Row>
 
-        <Spacer height={27} />
+        <Column
+          style={{
+            width: '100%',
+            marginTop: 55,
+          }}
+        >
+          <VolumeSlider
+            title="Sound Volume"
+            volume={volume}
+            onChangeValue={setVolume}
+          />
 
-        <VolumeSlider
-          title="Virtual Volume"
-          volume={virtualVolume}
-          onChangeValue={setVirtualVolume}
-        />
+          <Spacer height={27} />
 
-        <Spacer height={32} />
-        <KeybindInput
-          name={sound?.name ?? ''}
-          keybind={sound?.keybind ?? ''}
-          setKeybind={(value) => setKeybind(value)}
-          registerKeybind={registerKeybind}
-          unregisterKeybind={unregisterKeybind}
-        />
-        <Spacer height={61} />
+          <VolumeSlider
+            title="Virtual Volume"
+            volume={virtualVolume}
+            onChangeValue={setVirtualVolume}
+          />
 
-        <Column style={{ padding: '0px 27px', gap: 13 }}>
-          <Button
-            disabled={!sound}
-            type={
-              isSoundSettingDirty() ? ButtonType.filled : ButtonType.outline
-            }
-            onClick={handleSaveValue}
-          >
-            Save
-          </Button>
-          <Button
-            disabled={!sound}
-            type={ButtonType.outline}
-            onClick={handleResetValue}
-          >
-            Reset
-          </Button>
-          <Button
-            disabled={!sound}
-            type={ButtonType.outline}
-            onClick={handleResetDefaultValue}
-          >
-            Reset Default
-          </Button>
+          <Spacer height={32} />
+          <KeybindInput
+            name={sound?.name ?? ''}
+            keybind={sound?.keybind ?? ''}
+            setKeybind={(value) => setKeybind(value)}
+            registerKeybind={registerKeybind}
+            unregisterKeybind={unregisterKeybind}
+          />
+          <Spacer height={61} />
+
+          <Column style={{ padding: '0px 27px', gap: 13 }}>
+            <Button
+              disabled={!sound}
+              type={
+                isSoundSettingDirty() ? ButtonType.filled : ButtonType.outline
+              }
+              onClick={handleSaveValue}
+            >
+              Save
+            </Button>
+            <Button
+              disabled={!sound}
+              type={ButtonType.outline}
+              onClick={handleResetValue}
+            >
+              Reset
+            </Button>
+            <Button
+              disabled={!sound}
+              type={ButtonType.outline}
+              onClick={handleResetDefaultValue}
+            >
+              Reset Default
+            </Button>
+          </Column>
         </Column>
-      </Column>
-    </Container>
+      </Container>
+    </Wrapper>
   );
 };

@@ -8,7 +8,7 @@ type MyInputSliderProps = {
 export const MyInputSlider: React.FC<MyInputSliderProps> = ({
   volume,
   onChangeValue,
-}: MyInputSliderProps) => {
+}) => {
   return (
     <InputSlider
       styles={{

@@ -4,10 +4,6 @@ type MyIconProps = {
   alt: string;
 };
 
-export const MyIcon: React.FC<MyIconProps> = ({
-  icon,
-  size,
-  alt,
-}: MyIconProps) => {
+export const MyIcon: React.FC<MyIconProps> = ({ icon, size, alt }) => {
   return <img src={icon} width={size} height={size} alt={alt} />;
 };

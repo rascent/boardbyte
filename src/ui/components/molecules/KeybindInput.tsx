@@ -1,9 +1,8 @@
-import KeyboardIcon from 'assets/icons/keyboard.svg';
+import { KeyboardIcon } from 'assets/icons/Icons';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { InputLabel } from '../atoms/InputLabel';
-import { MyIcon } from '../atoms/MyIcon';
 
 import { Spacer } from '../atoms/Spacer';
 
@@ -44,7 +43,7 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
   setKeybind,
   registerKeybind,
   unregisterKeybind,
-}: KeybindInputProps) => {
+}) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [keys, setKeys] = useState<string[]>([]);
   const [buttonFocus, setButtonFocus] = useState<boolean>(false);
@@ -124,7 +123,7 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
         onKeyDown={handleKeyDown}
       >
         <KeybindText>{keys.join('+')}</KeybindText>
-        <MyIcon icon={KeyboardIcon} size={24} alt="input-keybind" />
+        <KeyboardIcon />
       </KeybindButton>
     </Column>
   );

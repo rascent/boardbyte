@@ -31,7 +31,7 @@ export const VolumeSlider: React.FC<VolumeSliderProps> = ({
   title,
   volume,
   onChangeValue,
-}: VolumeSliderProps) => {
+}) => {
   return (
     <Column
       style={{

@@ -1,9 +1,7 @@
-import PauseIcon from 'assets/icons/pause.svg';
-import PlayIcon from 'assets/icons/play.svg';
+import { PauseIcon, PlayIcon } from 'assets/icons/Icons';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
-import { MyIcon } from '../atoms/MyIcon';
 
 const { myIpcRenderer } = window;
 
@@ -62,14 +60,16 @@ export interface ISoundItem {
 type SoundItemProps = {
   outputs: string[];
   sound: ISoundItem;
-  onSelected(sound: ISoundItem): any;
+  onSelected(sound?: ISoundItem): any;
+  isSelected: boolean;
 };
 
 export const SoundItem: React.FC<SoundItemProps> = ({
   outputs,
   sound,
   onSelected,
-}: SoundItemProps) => {
+  isSelected,
+}) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const removeListenerRef = useRef<Function>();
   const primaryAudioRef = useRef<ExtendedAudioElement>(null);
@@ -147,15 +147,15 @@ export const SoundItem: React.FC<SoundItemProps> = ({
           backgroundColor: isPlaying ? '#633CD5' : '#7E8185',
         }}
       >
-        <MyIcon
-          icon={!isPlaying ? PlayIcon : PauseIcon}
-          size={40}
-          alt="play-pause"
-        />
+        {!isPlaying ? <PlayIcon /> : <PauseIcon />}
       </PlayContainer>
       <CursorContainer
         onClick={() => {
-          onSelected(sound);
+          if (isSelected) {
+            onSelected(undefined);
+          } else {
+            onSelected(sound);
+          }
         }}
       >
         <Title>{sound.name}</Title>

@@ -1,6 +1,5 @@
-import ChevronRight from 'assets/icons/chevron-right.svg';
+import { ChevronRightIcon } from 'assets/icons/Icons';
 import styled from 'styled-components';
-import { MyIcon } from '../atoms/MyIcon';
 import { Row } from '../atoms/Row';
 import { SelectFolder } from './SelectFolder';
 
@@ -16,7 +15,7 @@ export const BreadCrumb: React.FC = () => {
   return (
     <Row>
       <SelectFolder />
-      <MyIcon icon={ChevronRight} size={19} alt="breadcrumb-right" />
+      <ChevronRightIcon />
       <FolderText>Saved</FolderText>
     </Row>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ISoundItem } from 'ui/components/molecules/SoundItem';
+import { TitleBar } from 'ui/components/organisms/TitleBar';
 import { Row } from '../components/atoms/Row';
 import { MainGrid } from '../components/organisms/MainGrid';
 import { SideNav } from '../components/organisms/SideNav';
@@ -10,6 +11,11 @@ const { myIpcRenderer } = window;
 const AppContainer = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const MainContainer = styled(Row)`
+  align-items: start;
+  justify-content: space-between;
 `;
 
 const App: React.FC = () => {
@@ -110,14 +116,16 @@ const App: React.FC = () => {
 
   return (
     <AppContainer>
-      <Row style={{ alignItems: 'start', justifyContent: 'space-between' }}>
+      <TitleBar />
+      <MainContainer>
         <MainGrid
           sounds={sounds}
           outputs={outputs}
           onSelected={setSelectedSound}
+          selectedSound={selectedSound}
         />
         <SideNav sound={selectedSound} onSaveSound={handleSaveSound} />
-      </Row>
+      </MainContainer>
     </AppContainer>
   );
 };

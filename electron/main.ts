@@ -46,7 +46,7 @@ export default class Main {
 
   private static onReady() {
     Main.mainWindow = new Main.BrowserWindow({
-      frame: isDev ? true : false,
+      frame: false,
       width: 1366,
       height: 768,
       minWidth: 768,
@@ -95,7 +95,7 @@ export default class Main {
     autoUpdater.on('error', (error) => {
       dialog.showErrorBox(
         'Error: ',
-        error == null ? 'unknown' : (error.stack || error).toString()
+        error === null ? 'unknown' : (error.stack || error).toString()
       );
     });
     if (!isDev) {
@@ -104,7 +104,7 @@ export default class Main {
 
     var contextMenu = Menu.buildFromTemplate([
       {
-        label: 'Show SoundBoard',
+        label: 'Show Perkabodan',
         click: function () {
           Main.mainWindow.show();
         },
@@ -124,7 +124,7 @@ export default class Main {
 
     Main.tray = new Tray(path.join(__dirname, '../build/icon.png'));
     Main.tray.setContextMenu(contextMenu);
-    Main.tray.setToolTip('Soundboard');
+    Main.tray.setToolTip('Perkabodan');
     Main.tray.addListener('click', (e) => {
       Main.mainWindow.show();
     });
