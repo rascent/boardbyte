@@ -1,6 +1,5 @@
 import {
   HelpIcon,
-  LinkIcon,
   SunIcon,
   WindowCloseIcon,
   WindowMinIcon,
@@ -9,6 +8,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../atoms/Row';
 import { Spacer } from '../atoms/Spacer';
+import { IconContainer } from '../atoms/TitleBarIconContainer';
+import { LinkDropdown } from '../molecules/LinkDropdown';
 import { MySwitch } from '../molecules/MySwitch';
 
 const { myIpcRenderer } = window;
@@ -49,31 +50,6 @@ const ControlContainer = styled(Row)`
   -webkit-app-region: no-drag;
 `;
 
-const IconContainer = styled.div`
-  height: 100%;
-  width: 48px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  svg {
-    fill: #7e8185;
-  }
-
-  &:hover {
-    background: #393e45;
-
-    svg {
-      fill: #f8f8f8;
-    }
-  }
-
-  &.red:hover {
-    background: #d02f2f;
-  }
-`;
-
 const Separator = styled.div`
   margin: 12px 0px;
   height: 24px;
@@ -110,16 +86,18 @@ export const TitleBar: React.FC = () => {
           onChecked={handleCheck}
         />
         <Spacer width={16} />
-        <IconContainer>
-          <LinkIcon />
-        </IconContainer>
+
+        <LinkDropdown />
+
         <Separator />
         <IconContainer>
           <HelpIcon />
         </IconContainer>
+
         <IconContainer onClick={handleMin}>
           <WindowMinIcon />
         </IconContainer>
+
         <IconContainer onClick={handleClose} className="red">
           <WindowCloseIcon />
         </IconContainer>

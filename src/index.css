@@ -3,6 +3,11 @@
 * {
   margin: 0;
   font-family: 'Poppins', sans-serif, -apple-system;
+
+
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html {
@@ -11,6 +16,10 @@ html {
 
 body {
   background-color: #292b30;
+}
+
+svg {
+  pointer-events: none;
 }
 
 ::-webkit-scrollbar {

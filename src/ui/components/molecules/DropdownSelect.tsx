@@ -3,8 +3,9 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
 } from 'assets/icons/Icons';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useOnClickOutside } from 'usehooks-ts';
 
 const Container = styled.div`
   min-width: 258px;
@@ -78,21 +79,10 @@ export const DropdownSelect = ({
   onChange,
   selectedValue,
 }: any) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [showMenu, setShowMenu] = useState(false);
-  const inputRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handler = (e: any) => {
-      if (inputRef.current && !inputRef.current.contains(e.target)) {
-        setShowMenu(false);
-      }
-    };
-
-    window.addEventListener('click', handler);
-    return () => {
-      window.removeEventListener('click', handler);
-    };
-  });
+  useOnClickOutside(containerRef, () => setShowMenu(false));
 
   const handleInputClick = () => {
     setShowMenu(!showMenu);
@@ -106,6 +96,7 @@ export const DropdownSelect = ({
   };
 
   const onItemClick = (option: SelectOption) => {
+    setShowMenu(false);
     onChange(option);
   };
 
@@ -118,8 +109,8 @@ export const DropdownSelect = ({
   };
 
   return (
-    <Container>
-      <InputContainer ref={inputRef} onClick={handleInputClick}>
+    <Container ref={containerRef}>
+      <InputContainer onClick={handleInputClick}>
         <DisplayValue>{getDisplay()}</DisplayValue>
         {showMenu ? <ChevronUpIcon /> : <ChevronDownIcon />}
       </InputContainer>

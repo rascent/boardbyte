@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { Row } from '../atoms/Row';
+import { Spacer } from '../atoms/Spacer';
 import { BreadCrumb } from '../molecules/BreadCrumb';
 import { DropdownSelect, SelectOption } from '../molecules/DropdownSelect';
 import { MySwitch } from '../molecules/MySwitch';
@@ -31,6 +32,12 @@ const TopSetting = styled(Row)`
 
   display: flex;
   justify-content: space-between;
+`;
+
+const HearMyselfText = styled.p`
+  font-weight: 500;
+  font-size: 12px;
+  color: #f8f8f8;
 `;
 
 type MainGridProps = {
@@ -84,6 +91,8 @@ export const MainGrid: React.FC<MainGridProps> = ({
           />
         </Row>
         <Row style={{ paddingRight: 42 }}>
+          <HearMyselfText>Hear Myself</HearMyselfText>
+          <Spacer width={15} />
           <MySwitch isChecked={checked} onChecked={handleCheck} />
         </Row>
       </TopSetting>

@@ -2,6 +2,7 @@ import {
   App,
   app,
   BrowserWindow,
+  desktopCapturer,
   dialog,
   globalShortcut,
   ipcMain,
@@ -53,9 +54,9 @@ export default class Main {
       minHeight: 50,
       webPreferences: {
         webSecurity: false,
-        nodeIntegration: false,
-        contextIsolation: true,
-        enableRemoteModule: false,
+        // nodeIntegration: false,
+        // contextIsolation: true,
+        enableRemoteModule: true,
         preload: path.join(__dirname, 'preload.js'),
       },
       backgroundColor: '#fff',
@@ -273,6 +274,29 @@ export default class Main {
     });
   }
 
+  private static listenerPs() {
+    ipcMain.handle('APP_ps', (event, ...args) => {
+      return new Promise((resolve, reject) => {
+        desktopCapturer
+          .getSources({
+            types: ['window', 'screen'],
+            fetchWindowIcons: true,
+          })
+          .then((sources) => {
+            return resolve(
+              sources.map((source) => {
+                return {
+                  id: source.id,
+                  name: source.name,
+                  url: source.appIcon?.toDataURL(),
+                };
+              })
+            );
+          });
+      });
+    });
+  }
+
   static main(app: Electron.App, browserWindow: typeof BrowserWindow) {
     // ? Makes the code easier to write tests for
     Main.BrowserWindow = browserWindow;
@@ -288,6 +312,7 @@ export default class Main {
     this.listenerRecording();
     this.listenerListFiles();
     this.listenerVersion();
+    this.listenerPs();
   }
 }
 

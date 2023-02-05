@@ -13,6 +13,7 @@ import { ReactComponent as PauseIcon } from 'assets/icons/pause.svg';
 import { ReactComponent as PencilIcon } from 'assets/icons/pencil.svg';
 import { ReactComponent as PlayIcon } from 'assets/icons/play.svg';
 import { ReactComponent as SettingOutputIcon } from 'assets/icons/setting-output.svg';
+import { ReactComponent as StopCircleIcon } from 'assets/icons/stop-circle.svg';
 import { ReactComponent as SunIcon } from 'assets/icons/sun.svg';
 import { ReactComponent as TrashCanIcon } from 'assets/icons/trash-can.svg';
 import { ReactComponent as WindowCloseIcon } from 'assets/icons/window-close.svg';
@@ -40,4 +41,5 @@ export {
   SettingOutputIcon,
   TrashCanIcon,
   WindowSquareIcon,
+  StopCircleIcon,
 };
