@@ -98,11 +98,15 @@ const DisconnectButton = styled.div`
   justify-content: center;
 
   font-weight: 700;
+  text-transform: capitalize;
 
   border-top: 1px solid #3d4045;
   border-radius: 0px 0px 4px 4px;
 
-  &.connected {
+  &.connect {
+    background: #25732c;
+  }
+  &.disconnect {
     background: #d02f2f;
   }
 `;
@@ -172,10 +176,10 @@ export const LinkDropdown = () => {
 
           <DisconnectButton
             onClick={() => setIsConnected((i) => !i)}
-            className={isConnected ? 'connected' : ''}
+            className={isConnected ? 'disconnect' : 'connect'}
           >
             <StopCircleIcon />
-            Disconnected
+            {isConnected ? 'disconnect' : 'connect'}
           </DisconnectButton>
         </MenuContainer>
       )}

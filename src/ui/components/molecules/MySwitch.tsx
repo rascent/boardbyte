@@ -13,7 +13,7 @@ const SwitchLabel = styled.label`
   position: relative;
   display: inline-block;
   width: 50px;
-  height: 25px;
+  height: 24px;
 `;
 
 const SwitchSpan = styled.span`
@@ -29,10 +29,10 @@ const SwitchSpan = styled.span`
   &::before {
     position: absolute;
     content: '';
-    left: 2px;
-    top: 2px;
-    width: 21px;
-    height: 21px;
+    left: 3px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
     background-color: #313338;
     border-radius: 50%;
     transition: transform 0.3s ease;
