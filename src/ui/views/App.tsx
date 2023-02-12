@@ -26,14 +26,14 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const dir = localStorage.getItem('dir');
-    if (dir) myIpcRenderer.send('APP_listFiles', dir);
+    if (dir) myIpcRenderer.send('app/listFiles', dir);
 
     navigator.mediaDevices.enumerateDevices().then((devices) => {
       devices = devices.filter((output) => output.kind === 'audiooutput');
       setOutputs(devices);
     });
 
-    myIpcRenderer.on('APP_listedFiles', (result) => {
+    myIpcRenderer.on('app/listedFiles', (result) => {
       const soundsString = localStorage.getItem('sounds');
 
       let soundList: ISoundItem[] = soundsString
@@ -70,7 +70,7 @@ const App: React.FC = () => {
           data.filter((x) => {
             const isNotNull = x != null;
             if (isNotNull) {
-              myIpcRenderer.send('APP_setkey', x.keybind, x.name);
+              myIpcRenderer.send('app/setkey', x.keybind, x.name);
             }
             return isNotNull;
           }) as ISoundItem[]
@@ -96,7 +96,7 @@ const App: React.FC = () => {
       });
       localStorage.setItem('sounds', JSON.stringify(modifiedSounds));
       const dir = localStorage.getItem('dir');
-      if (dir) myIpcRenderer.send('APP_listFiles', dir);
+      if (dir) myIpcRenderer.send('app/listFiles', dir);
       return modifiedSounds;
     });
 

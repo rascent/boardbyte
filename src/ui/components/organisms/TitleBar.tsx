@@ -65,17 +65,19 @@ export const TitleBar: React.FC = () => {
   };
 
   const handleClose = () => {
-    myIpcRenderer.invoke('APP_close');
+    myIpcRenderer.invoke('app/close');
   };
 
   const handleMin = () => {
-    myIpcRenderer.invoke('APP_min');
+    myIpcRenderer.invoke('app/min');
   };
+
+  const appName: string = process.env.REACT_APP_NAME as string;
 
   return (
     <Container>
       <LogoContainer>
-        <Logo>Logo</Logo>
+        <Logo>{appName}</Logo>
       </LogoContainer>
       <ControlContainer>
         <SunIcon fill={checked ? '#EAC713' : '#7E8185'} />

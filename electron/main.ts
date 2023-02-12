@@ -27,6 +27,8 @@ interface Bind {
   name: string;
 }
 
+const appName: string = 'Boardbyte';
+
 export default class Main {
   static mainWindow: BrowserWindow;
   static application: App;
@@ -105,7 +107,7 @@ export default class Main {
 
     var contextMenu = Menu.buildFromTemplate([
       {
-        label: 'Show Perkabodan',
+        label: `Show ${appName}`,
         click: function () {
           Main.mainWindow.show();
         },
@@ -125,22 +127,22 @@ export default class Main {
 
     Main.tray = new Tray(path.join(__dirname, '../build/icon.png'));
     Main.tray.setContextMenu(contextMenu);
-    Main.tray.setToolTip('Perkabodan');
+    Main.tray.setToolTip(`${appName}`);
     Main.tray.addListener('click', (e) => {
       Main.mainWindow.show();
     });
   }
 
   private static listenerVersion() {
-    ipcMain.on('APP_getVersion', (event) => {
+    ipcMain.on('app/getVersion', (event) => {
       if (!isDev) {
         autoUpdater.on('update-available', (info) => {
-          event.reply('APP_currentVersion', info);
+          event.reply('app/currentVersion', info);
         });
         autoUpdater.checkForUpdates();
-        event.reply('APP_currentVersion', app.getVersion());
+        event.reply('app/currentVersion', app.getVersion());
       } else {
-        event.reply('APP_currentVersion', 'DEV');
+        event.reply('app/currentVersion', 'DEV');
       }
     });
   }
@@ -167,7 +169,7 @@ export default class Main {
   }
 
   private static listenerListFiles() {
-    ipcMain.on('APP_listFiles', (event, dir) => {
+    ipcMain.on('app/listFiles', (event, dir) => {
       this.listAudioFiles(dir).then(([paths, files]) => {
         let load = {
           dir: dir,
@@ -175,14 +177,14 @@ export default class Main {
           fileNames: files,
         };
 
-        event.sender.send('APP_listedFiles', load);
+        event.sender.send('app/listedFiles', load);
       });
     });
   }
 
   private static listenerFileSelection() {
     // ? For selecting directory
-    ipcMain.handle('APP_showDialog', (event, ...args) => {
+    ipcMain.handle('app/showDialog', (event, ...args) => {
       return new Promise((resolve, reject) => {
         dialog
           .showOpenDialog({ properties: ['openDirectory'] })
@@ -198,7 +200,7 @@ export default class Main {
 
                 resolve(load);
 
-                event.sender.send('APP_listedFiles', load);
+                event.sender.send('app/listedFiles', load);
               });
             }
           })
@@ -210,13 +212,13 @@ export default class Main {
   }
 
   private static listenerClose() {
-    ipcMain.handle('APP_close', (event, ...args) => {
+    ipcMain.handle('app/close', (event, ...args) => {
       Main.mainWindow.close();
     });
   }
 
   private static listenerMin() {
-    ipcMain.handle('APP_min', (event, ...args) => {
+    ipcMain.handle('app/min', (event, ...args) => {
       Main.mainWindow.hide();
     });
   }
@@ -224,7 +226,7 @@ export default class Main {
   private static listenerHotkey() {
     let bindings: Bind[] = [];
 
-    ipcMain.on('APP_setkey', (event, key: string, title: string, ...args) => {
+    ipcMain.on('app/setkey', (event, key: string, title: string, ...args) => {
       let exists = false;
 
       if (key === '') return;
@@ -250,7 +252,7 @@ export default class Main {
 
       try {
         globalShortcut.register(key, () => {
-          event.reply('APP_keypressed', key);
+          event.reply('app/keypressed', key);
         });
       } catch (error) {
         console.log(error);
@@ -259,7 +261,7 @@ export default class Main {
   }
 
   private static listenerRecording() {
-    ipcMain.on('APP_saveRecording', async (event, data) => {
+    ipcMain.on('app/saveRecording', async (event, data) => {
       const { filePath } = await dialog.showSaveDialog({
         buttonLabel: 'Save Audio',
         defaultPath: `audio-${Date.now()}`,
@@ -269,13 +271,13 @@ export default class Main {
       if (filePath)
         fspromise
           .writeFile(filePath, data)
-          .then(event.reply('APP_saveSuccess', true))
+          .then(event.reply('app/saveSuccess', true))
           .catch((e) => console.log(e));
     });
   }
 
   private static listenerPs() {
-    ipcMain.handle('APP_ps', (event, ...args) => {
+    ipcMain.handle('app/ps', (event, ...args) => {
       return new Promise((resolve, reject) => {
         desktopCapturer
           .getSources({

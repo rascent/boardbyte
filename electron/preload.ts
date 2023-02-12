@@ -3,7 +3,7 @@ import { SourcesOptions } from 'electron';
 const { contextBridge, ipcRenderer, desktopCapturer } = require('electron');
 
 const callIpcRenderer = (method: string, channel: string, ...args: any[]) => {
-  if (typeof channel !== 'string' || !channel.startsWith('APP_')) {
+  if (typeof channel !== 'string' || !channel.startsWith('app/')) {
     console.log('Error: IPC channel name not allowed');
   }
   if (['invoke', 'send'].includes(method)) {

@@ -106,7 +106,7 @@ export const SoundItem: React.FC<SoundItemProps> = ({
     if (removeListenerRef.current) removeListenerRef.current();
 
     removeListenerRef.current = myIpcRenderer.on(
-      'APP_keypressed',
+      'app/keypressed',
       (args: string) => {
         if (sound.keybind === args) {
           play();

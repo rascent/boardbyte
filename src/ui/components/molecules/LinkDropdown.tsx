@@ -139,7 +139,7 @@ export const LinkDropdown = () => {
   };
 
   useEffect(() => {
-    myIpcRenderer.invoke('APP_ps').then((pl: ActiveAppProcess[]) => {
+    myIpcRenderer.invoke('app/ps').then((pl: ActiveAppProcess[]) => {
       if (pl.length === 0) return;
 
       const knownAppProcesses = pl

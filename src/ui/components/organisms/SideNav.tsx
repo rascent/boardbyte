@@ -56,11 +56,11 @@ export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
   const [transform, setTransform] = useState('translateX(100%)');
 
   const registerKeybind = () => {
-    myIpcRenderer.send('APP_setkey', keybind, sound?.name);
+    myIpcRenderer.send('app/setkey', keybind, sound?.name);
   };
 
   const unregisterKeybind = () => {
-    myIpcRenderer.send('APP_setkey', '', sound?.name);
+    myIpcRenderer.send('app/setkey', '', sound?.name);
   };
 
   const handleSaveValue = () => {

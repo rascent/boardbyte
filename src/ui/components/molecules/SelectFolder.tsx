@@ -20,7 +20,7 @@ const SelectText = styled.p`
 
 export const SelectFolder = () => {
   const handlePathSelection = () => {
-    myIpcRenderer.invoke('APP_showDialog');
+    myIpcRenderer.invoke('app/showDialog');
   };
 
   return (
