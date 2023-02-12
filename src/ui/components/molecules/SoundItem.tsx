@@ -133,12 +133,19 @@ export const SoundItem: React.FC<SoundItemProps> = ({
     secondaryAudioRef.current!.addEventListener('ended', () =>
       setIsPlaying(false)
     );
+
+    primaryAudioRef.current?.load();
+    secondaryAudioRef.current?.load();
   }, [sound]);
 
   return (
     <Wrapper>
-      <audio ref={primaryAudioRef} src={sound.source} preload="auto" />
-      <audio ref={secondaryAudioRef} src={sound.source} preload="auto" />
+      <audio ref={primaryAudioRef} preload="auto">
+        <source src={sound.source} type="audio/mpeg" />
+      </audio>
+      <audio ref={secondaryAudioRef} src={sound.source} preload="auto">
+        <source src={sound.source} type="audio/mpeg" />
+      </audio>
       <PlayContainer
         onClick={() => {
           play();
