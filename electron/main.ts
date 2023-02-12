@@ -125,7 +125,7 @@ export default class Main {
       },
     ]);
 
-    Main.tray = new Tray(path.join(__dirname, 'build/icon.png'));
+    Main.tray = new Tray(path.join(__dirname, '../public/icon.png'));
     Main.tray.setContextMenu(contextMenu);
     Main.tray.setToolTip(appName);
     Main.tray.addListener('click', (e) => {

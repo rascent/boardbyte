@@ -45,7 +45,7 @@
     "electron-pack": "electron-builder --em.main=build/main.js"
   },
   "build": {
-    "icon": "/build/icon.png",
+    "icon": "./public/icon.png",
     "appId": "com.example.electron-cra",
     "linux": {
       "target": [
@@ -95,7 +95,6 @@
     ]
   },
   "devDependencies": {
-    "@iconify/react": "^4.1.0",
     "@types/styled-components": "^5.1.26",
     "concurrently": "^7.6.0",
     "cross-env": "^7.0.3",
