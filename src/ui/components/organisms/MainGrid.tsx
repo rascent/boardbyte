@@ -1,5 +1,5 @@
 import { SettingOutputIcon } from 'assets/icons/Icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { Row } from '../atoms/Row';
@@ -42,9 +42,14 @@ const HearMyselfText = styled.p`
 
 type MainGridProps = {
   sounds: ISoundItem[];
-  outputs?: MediaDeviceInfo[];
+  outputs: MediaDeviceInfo[];
   onSelected(sound?: ISoundItem): any;
   selectedSound?: ISoundItem;
+};
+
+const defaultOutput: SelectOption = {
+  label: 'Default Ouput',
+  deviceId: 'default',
 };
 
 export const MainGrid: React.FC<MainGridProps> = ({
@@ -56,9 +61,9 @@ export const MainGrid: React.FC<MainGridProps> = ({
   const [checked, setChecked] = useState(false);
 
   const [selectedPrimaryOutput, setSelectedPrimaryOutput] =
-    useState<SelectOption>({ label: 'Default Ouput', deviceId: 'default' });
+    useState<SelectOption>(defaultOutput);
   const [selectedSecondaryOutput, setSelectedSecondaryOutput] =
-    useState<SelectOption>({ label: 'Default Output', deviceId: 'default' });
+    useState<SelectOption>(defaultOutput);
 
   const handleCheck = () => {
     setChecked((c) => !c);
@@ -73,6 +78,24 @@ export const MainGrid: React.FC<MainGridProps> = ({
     setSelectedSecondaryOutput(value);
     localStorage.setItem('secondary_output', value.deviceId);
   };
+
+  useEffect(() => {
+    if (outputs.length === 0) return;
+
+    let output_1 = localStorage.getItem('primary_output');
+    if (output_1) {
+      setSelectedPrimaryOutput(
+        outputs.find((out) => out.deviceId === output_1) ?? defaultOutput
+      );
+    }
+
+    let output_2 = localStorage.getItem('secondary_output');
+    if (output_2) {
+      setSelectedSecondaryOutput(
+        outputs.find((out) => out.deviceId === output_2) ?? defaultOutput
+      );
+    }
+  }, [outputs]);
 
   return (
     <Column style={{ width: '76%' }}>

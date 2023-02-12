@@ -21,7 +21,7 @@ const MainContainer = styled(Row)`
 const App: React.FC = () => {
   const defaultVolume = 50;
   const [selectedSound, setSelectedSound] = useState<ISoundItem>();
-  const [outputs, setOutputs] = useState<MediaDeviceInfo[]>();
+  const [outputs, setOutputs] = useState<MediaDeviceInfo[]>([]);
   const [sounds, setSounds] = useState<ISoundItem[]>([]);
 
   useEffect(() => {
