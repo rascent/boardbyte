@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useOnClickOutside } from 'usehooks-ts';
 import { Spacer } from '../atoms/Spacer';
 import { IconContainer } from '../atoms/TitleBarIconContainer';
+import { SearchInput } from './SearchInput';
 
 const { myIpcRenderer } = window;
 
@@ -131,11 +132,12 @@ export const LinkDropdown = () => {
   const [activeApps, setActiveApps] = useState<ActiveAppProcess[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [showLinkMenu, setShowLinkMenu] = useState(false);
+  const [knownApps, setKnownApps] = useState(KNOWN_APPS);
 
   useOnClickOutside(containerRef, () => setShowLinkMenu(false));
 
   const getSimpleName = (app: ActiveAppProcess) => {
-    return KNOWN_APPS.find((ka) => app.name.toLowerCase().includes(ka)) ?? '';
+    return knownApps.find((ka) => app.name.toLowerCase().includes(ka)) ?? '';
   };
 
   useEffect(() => {
@@ -145,8 +147,8 @@ export const LinkDropdown = () => {
       const knownAppProcesses = pl
         .filter(
           (p) =>
-            KNOWN_APPS.findIndex((ka) => p.name.toLowerCase().includes(ka)) !==
-            -1
+            knownApps.findIndex((ka) => p.name.toLowerCase().includes(ka)) !==
+            -1,
         )
         .sort((a, b) => getSimpleName(a).localeCompare(getSimpleName(b)));
       setActiveApps(knownAppProcesses);
@@ -161,6 +163,10 @@ export const LinkDropdown = () => {
       {showLinkMenu && (
         <MenuContainer>
           <HeaderContainer>Connected</HeaderContainer>
+
+          <Spacer height={12} />
+
+          <SearchInput name={'query'} type={'text'} />
 
           <Spacer height={12} />
 

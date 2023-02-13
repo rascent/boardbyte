@@ -14,6 +14,13 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: auto auto auto auto;
   gap: 24px 56px;
+  overflow-y: auto;
+  max-height: 60vh;
+  overflow: hidden;
+
+  &:hover {
+    overflow: auto;
+  }
 
   margin: 40px 77px;
 `;
@@ -85,14 +92,14 @@ export const MainGrid: React.FC<MainGridProps> = ({
     let output_1 = localStorage.getItem('primary_output');
     if (output_1) {
       setSelectedPrimaryOutput(
-        outputs.find((out) => out.deviceId === output_1) ?? defaultOutput
+        outputs.find((out) => out.deviceId === output_1) ?? defaultOutput,
       );
     }
 
     let output_2 = localStorage.getItem('secondary_output');
     if (output_2) {
       setSelectedSecondaryOutput(
-        outputs.find((out) => out.deviceId === output_2) ?? defaultOutput
+        outputs.find((out) => out.deviceId === output_2) ?? defaultOutput,
       );
     }
   }, [outputs]);
