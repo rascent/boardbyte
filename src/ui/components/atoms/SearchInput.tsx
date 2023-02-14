@@ -1,12 +1,14 @@
 import { MagnifyIcon } from 'assets/icons/Icons';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Column } from '../atoms/Column';
+import { Column } from './Column';
+import { Row } from './Row';
 
 const SearchBox = styled.div`
   display: flex;
   align-items: center;
 
+  margin-top: 16px;
   padding: 4px 8px;
   border: none;
   border-radius: 2px;
@@ -24,16 +26,33 @@ const SearchTextField = styled.input`
   line-height: 15px;
   color: #ffffff;
   background-color: transparent;
-  border: 0;
+  border: none;
+  outline: none;
   width: 100%;
 `;
 
 type SearchInputProps = {
   name: string;
   type: string;
+  submit: Function;
 };
-export const SearchInput: React.FC<SearchInputProps> = ({ name, type }) => {
+export const SearchInput: React.FC<SearchInputProps> = ({
+  name,
+  type,
+  submit,
+}) => {
   const [query, setQuery] = useState<string>('');
+
+  const submitHandler = () => {
+    submit(query);
+    setQuery('');
+  };
+
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Enter') {
+      submitHandler();
+    }
+  };
 
   return (
     <Column
@@ -47,8 +66,11 @@ export const SearchInput: React.FC<SearchInputProps> = ({ name, type }) => {
           onChange={(e) => setQuery(e.target.value)}
           placeholder={'Search...'}
           value={query}
+          onKeyDown={handleKeyPress}
         />
-        <MagnifyIcon style={{ cursor: 'pointer' }} />
+        <Row style={{ cursor: 'pointer' }} onClick={submitHandler}>
+          <MagnifyIcon />
+        </Row>
       </SearchBox>
     </Column>
   );
