@@ -1,10 +1,16 @@
-import { LinkIcon, StopCircleIcon } from 'assets/icons/Icons';
+import {
+  LinkIcon,
+  LinkPlusIcon,
+  StopCircleIcon,
+  TrashCanIcon,
+} from 'assets/icons/Icons';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from 'usehooks-ts';
 import { Spacer } from '../atoms/Spacer';
 import { IconContainer } from '../atoms/TitleBarIconContainer';
-import { SearchInput } from './SearchInput';
+import { SearchInput } from '../atoms/SearchInput';
+import { Row } from '../atoms/Row';
 
 const { myIpcRenderer } = window;
 
@@ -38,7 +44,7 @@ const HeaderContainer = styled.div`
 
 const MenuContainer = styled.div`
   width: 175px;
-  max-height: 240px;
+  max-height: 90vh;
   border-radius: 4px;
 
   top: 48px;
@@ -62,7 +68,7 @@ const MenuItem = styled.div`
 
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 
   &:hover {
     background-color: #313338;
@@ -112,6 +118,39 @@ const DisconnectButton = styled.div`
   }
 `;
 
+const ItemHeader = styled(Row)`
+  padding: 0px 16px;
+  display: flex;
+  justify-content: space-between;
+  height: 16px;
+`;
+
+const RegisteredLabel = styled.p`
+  color: #7e8185;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 15px;
+`;
+
+const DoneLabel = styled.p`
+  color: #633cd4;
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 12px;
+`;
+
+const ItemFooter = styled(Row)`
+  justify-content: center;
+`;
+
+const ShowLabel = styled.p`
+  color: #168ade;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 15px;
+  cursor: pointer;
+`;
+
 interface ActiveAppProcess {
   id: string;
   name: string;
@@ -133,6 +172,12 @@ export const LinkDropdown = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [showLinkMenu, setShowLinkMenu] = useState(false);
   const [knownApps, setKnownApps] = useState(KNOWN_APPS);
+  const [isAdd, setIsAdd] = useState(false);
+  const [isRemove, setIsRemove] = useState(false);
+  const [isShowMore, setIsShowMore] = useState(false);
+  const [blacklistedApps, setBlacklistedApps] = useState<ActiveAppProcess[]>(
+    [],
+  );
 
   useOnClickOutside(containerRef, () => setShowLinkMenu(false));
 
@@ -140,20 +185,42 @@ export const LinkDropdown = () => {
     return knownApps.find((ka) => app.name.toLowerCase().includes(ka)) ?? '';
   };
 
+  const addKnownApps = (value: string) => {
+    if (value && !knownApps.includes(value)) {
+      setKnownApps((prev) => [...prev, value]);
+    }
+  };
+
+  useEffect(() => {
+    let localKnownApps = localStorage.getItem('known_apps');
+    if (localKnownApps) {
+      setKnownApps(JSON.parse(localKnownApps));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (knownApps !== KNOWN_APPS) {
+      localStorage.setItem('known_apps', JSON.stringify(knownApps));
+    }
+  }, [knownApps]);
+
   useEffect(() => {
     myIpcRenderer.invoke('app/ps').then((pl: ActiveAppProcess[]) => {
       if (pl.length === 0) return;
 
       const knownAppProcesses = pl
         .filter(
-          (p) =>
+          (p, index) =>
             knownApps.findIndex((ka) => p.name.toLowerCase().includes(ka)) !==
-            -1,
+              -1 &&
+            !blacklistedApps.find((bl) => bl.id === p.id) &&
+            pl.findIndex((item) => getSimpleName(item) === getSimpleName(p)) ===
+              index,
         )
         .sort((a, b) => getSimpleName(a).localeCompare(getSimpleName(b)));
       setActiveApps(knownAppProcesses);
     });
-  }, []);
+  }, [knownApps, blacklistedApps]);
 
   return (
     <Container ref={containerRef}>
@@ -162,31 +229,86 @@ export const LinkDropdown = () => {
       </IconContainer>
       {showLinkMenu && (
         <MenuContainer>
-          <HeaderContainer>Connected</HeaderContainer>
+          <HeaderContainer>
+            Connected
+            <Row
+              style={{ cursor: 'pointer' }}
+              onClick={() => setIsAdd((prev) => !prev)}
+            >
+              <LinkPlusIcon />
+            </Row>
+          </HeaderContainer>
+
+          {isAdd && (
+            <SearchInput name="query" type="text" submit={addKnownApps} />
+          )}
 
           <Spacer height={12} />
 
-          <SearchInput name={'query'} type={'text'} />
+          <ItemHeader>
+            <RegisteredLabel>Registered Apps</RegisteredLabel>
+            <Row
+              style={{ cursor: 'pointer' }}
+              onClick={() => setIsRemove((prev) => !prev)}
+            >
+              {!isRemove ? (
+                <TrashCanIcon
+                  fill="#7E8185"
+                  style={{ width: 16, height: 16 }}
+                />
+              ) : (
+                <DoneLabel>Done</DoneLabel>
+              )}
+            </Row>
+          </ItemHeader>
 
           <Spacer height={12} />
 
           <ItemsWrap>
-            {activeApps.map((app) => (
-              <MenuItem key={app.id} onClick={() => {}}>
-                <AppIcon src={app.url} alt="" />
-                <Spacer width={8} />
-                <AppLabel>{getSimpleName(app)}</AppLabel>
-              </MenuItem>
-            ))}
+            {activeApps
+              .slice(0, isShowMore ? activeApps.length : 2)
+              .map((app) => (
+                <MenuItem key={app.id} onClick={() => {}}>
+                  <Row>
+                    <AppIcon src={app.url} alt="" />
+                    <Spacer width={8} />
+                    <AppLabel>{getSimpleName(app)}</AppLabel>
+                  </Row>
+                  {isRemove && (
+                    <Row
+                      onClick={() =>
+                        setBlacklistedApps((prev) => [...prev, app])
+                      }
+                    >
+                      <TrashCanIcon
+                        fill="#7E8185"
+                        style={{ width: 16, height: 16 }}
+                      />
+                    </Row>
+                  )}
+                </MenuItem>
+              ))}
           </ItemsWrap>
 
-          <DisconnectButton
+          <Spacer height={12} />
+
+          {activeApps.length > 2 && (
+            <ItemFooter>
+              <ShowLabel onClick={() => setIsShowMore((prev) => !prev)}>
+                Show {!isShowMore ? 'more' : 'less'}
+              </ShowLabel>
+            </ItemFooter>
+          )}
+
+          <Spacer height={16} />
+
+          {/* <DisconnectButton
             onClick={() => setIsConnected((i) => !i)}
             className={isConnected ? 'disconnect' : 'connect'}
           >
             <StopCircleIcon />
             {isConnected ? 'disconnect' : 'connect'}
-          </DisconnectButton>
+          </DisconnectButton> */}
         </MenuContainer>
       )}
     </Container>
