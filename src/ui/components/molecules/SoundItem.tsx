@@ -8,11 +8,12 @@ const { myIpcRenderer } = window;
 const Wrapper = styled(Column)`
   align-items: center;
   width: fit-content;
+  max-width: 156px;
 `;
 
 const PlayContainer = styled.div`
   cursor: pointer;
-  padding: 43px 59px;
+  padding: 43px 56px;
   border-radius: 18px;
 
   display: flex;
@@ -111,7 +112,7 @@ export const SoundItem: React.FC<SoundItemProps> = ({
         if (sound.keybind === args) {
           play();
         }
-      }
+      },
     );
 
     sound.name &&
@@ -121,17 +122,17 @@ export const SoundItem: React.FC<SoundItemProps> = ({
 
   useEffect(() => {
     primaryAudioRef.current!.volume = Math.exp(
-      (Math.log(sound.volume / 100) / Math.log(10)) * 4
+      (Math.log(sound.volume / 100) / Math.log(10)) * 4,
     );
     secondaryAudioRef.current!.volume = Math.exp(
-      (Math.log(sound.virtualVolume / 100) / Math.log(10)) * 4
+      (Math.log(sound.virtualVolume / 100) / Math.log(10)) * 4,
     );
 
     primaryAudioRef.current!.addEventListener('ended', () =>
-      setIsPlaying(false)
+      setIsPlaying(false),
     );
     secondaryAudioRef.current!.addEventListener('ended', () =>
-      setIsPlaying(false)
+      setIsPlaying(false),
     );
 
     primaryAudioRef.current?.load();
