@@ -18,9 +18,7 @@ const GridContainer = styled.div`
   max-height: 64vh;
   overflow-y: auto;
 
-  margin: 0px 0px 0px 42px;
-  padding-bottom: 40px;
-  padding-right: 42px;
+  padding: 0px 42px 40px 42px;
 `;
 
 const MainGridAction = styled.div`
@@ -91,14 +89,14 @@ export const MainGrid: React.FC<MainGridProps> = ({
     let output_1 = localStorage.getItem('primary_output');
     if (output_1) {
       setSelectedPrimaryOutput(
-        outputs.find((out) => out.deviceId === output_1) ?? defaultOutput,
+        outputs.find((out) => out.deviceId === output_1) ?? defaultOutput
       );
     }
 
     let output_2 = localStorage.getItem('secondary_output');
     if (output_2) {
       setSelectedSecondaryOutput(
-        outputs.find((out) => out.deviceId === output_2) ?? defaultOutput,
+        outputs.find((out) => out.deviceId === output_2) ?? defaultOutput
       );
     }
   }, [outputs]);
