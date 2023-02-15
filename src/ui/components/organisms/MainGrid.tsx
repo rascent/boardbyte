@@ -12,17 +12,15 @@ import { ISoundItem, SoundItem } from '../molecules/SoundItem';
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto;
-  gap: 24px 56px;
+  grid-template-columns: auto auto auto auto auto;
+  gap: 24px 42px;
   overflow-y: auto;
-  max-height: 60vh;
-  overflow: hidden;
+  max-height: 64vh;
+  overflow-y: auto;
 
-  &:hover {
-    overflow: auto;
-  }
-
-  margin: 40px 77px;
+  margin: 0px 0px 0px 42px;
+  padding-bottom: 40px;
+  padding-right: 42px;
 `;
 
 const MainGridAction = styled.div`
@@ -30,6 +28,7 @@ const MainGridAction = styled.div`
   justify-content: space-between;
 
   margin: 24px 42px 32px 42px;
+  padding-right: 39px;
 `;
 
 const TopSetting = styled(Row)`
