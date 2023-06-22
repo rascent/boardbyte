@@ -1,4 +1,4 @@
-import { DesktopCapturerSource, SourcesOptions } from 'electron';
+import { DesktopCapturerSource, SourcesOptions } from "electron";
 
 declare global {
   interface Window {

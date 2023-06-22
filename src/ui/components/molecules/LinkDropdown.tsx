@@ -1,18 +1,11 @@
-import {
-  LinkIcon,
-  LinkPlusIcon,
-  StopCircleIcon,
-  TrashCanIcon,
-} from 'assets/icons/Icons';
-import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { useOnClickOutside } from 'usehooks-ts';
-import { Spacer } from '../atoms/Spacer';
-import { IconContainer } from '../atoms/TitleBarIconContainer';
-import { SearchInput } from '../atoms/SearchInput';
-import { Row } from '../atoms/Row';
-
-const { myIpcRenderer } = window;
+import { LinkIcon, LinkPlusIcon, TrashCanIcon } from "assets/icons/Icons";
+import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import { useOnClickOutside } from "usehooks-ts";
+import { Spacer } from "../atoms/Spacer";
+import { IconContainer } from "../atoms/TitleBarIconContainer";
+import { SearchInput } from "../atoms/SearchInput";
+import { Row } from "../atoms/Row";
 
 const Container = styled.div`
   height: 100%;
@@ -158,12 +151,12 @@ interface ActiveAppProcess {
 }
 
 const KNOWN_APPS = [
-  'chrome',
-  'discord',
-  'twitch',
-  'valorant',
-  'apex legends',
-  'pubg',
+  "chrome",
+  "discord",
+  "twitch",
+  "valorant",
+  "apex legends",
+  "pubg",
 ];
 
 export const LinkDropdown = () => {
@@ -176,13 +169,13 @@ export const LinkDropdown = () => {
   const [isRemove, setIsRemove] = useState(false);
   const [isShowMore, setIsShowMore] = useState(false);
   const [blacklistedApps, setBlacklistedApps] = useState<ActiveAppProcess[]>(
-    [],
+    []
   );
 
   useOnClickOutside(containerRef, () => setShowLinkMenu(false));
 
   const getSimpleName = (app: ActiveAppProcess) => {
-    return knownApps.find((ka) => app.name.toLowerCase().includes(ka)) ?? '';
+    return knownApps.find((ka) => app.name.toLowerCase().includes(ka)) ?? "";
   };
 
   const addKnownApps = (value: string) => {
@@ -192,7 +185,7 @@ export const LinkDropdown = () => {
   };
 
   useEffect(() => {
-    let localKnownApps = localStorage.getItem('known_apps');
+    let localKnownApps = localStorage.getItem("known_apps");
     if (localKnownApps) {
       setKnownApps(JSON.parse(localKnownApps));
     }
@@ -200,12 +193,12 @@ export const LinkDropdown = () => {
 
   useEffect(() => {
     if (knownApps !== KNOWN_APPS) {
-      localStorage.setItem('known_apps', JSON.stringify(knownApps));
+      localStorage.setItem("known_apps", JSON.stringify(knownApps));
     }
   }, [knownApps]);
 
   useEffect(() => {
-    myIpcRenderer.invoke('app/ps').then((pl: ActiveAppProcess[]) => {
+    window.myIpcRenderer.invoke("app/ps").then((pl: ActiveAppProcess[]) => {
       if (pl.length === 0) return;
 
       const knownAppProcesses = pl
@@ -215,7 +208,7 @@ export const LinkDropdown = () => {
               -1 &&
             !blacklistedApps.find((bl) => bl.id === p.id) &&
             pl.findIndex((item) => getSimpleName(item) === getSimpleName(p)) ===
-              index,
+              index
         )
         .sort((a, b) => getSimpleName(a).localeCompare(getSimpleName(b)));
       setActiveApps(knownAppProcesses);
@@ -232,7 +225,7 @@ export const LinkDropdown = () => {
           <HeaderContainer>
             Connected
             <Row
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               onClick={() => setIsAdd((prev) => !prev)}
             >
               <LinkPlusIcon />
@@ -248,7 +241,7 @@ export const LinkDropdown = () => {
           <ItemHeader>
             <RegisteredLabel>Registered Apps</RegisteredLabel>
             <Row
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               onClick={() => setIsRemove((prev) => !prev)}
             >
               {!isRemove ? (
@@ -295,7 +288,7 @@ export const LinkDropdown = () => {
           {activeApps.length > 2 && (
             <ItemFooter>
               <ShowLabel onClick={() => setIsShowMore((prev) => !prev)}>
-                Show {!isShowMore ? 'more' : 'less'}
+                Show {!isShowMore ? "more" : "less"}
               </ShowLabel>
             </ItemFooter>
           )}

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export type OpacityProps = {
   opacity: number;
@@ -22,7 +22,7 @@ const Container = styled.div`
 export const SideNavPlaceholder: React.FC<OpacityProps> = ({ opacity }) => {
   return (
     <Container style={{ opacity: opacity }}>
-      Select your sounds
+      Select your sound
       <br />
       to setting here
     </Container>

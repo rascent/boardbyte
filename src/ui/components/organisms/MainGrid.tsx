@@ -1,14 +1,14 @@
-import { SettingOutputIcon } from 'assets/icons/Icons';
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Column } from '../atoms/Column';
-import { Row } from '../atoms/Row';
-import { Spacer } from '../atoms/Spacer';
-import { BreadCrumb } from '../molecules/BreadCrumb';
-import { DropdownSelect, SelectOption } from '../molecules/DropdownSelect';
-import { MySwitch } from '../molecules/MySwitch';
-import { NewRecordButton } from '../molecules/NewRecordButton';
-import { ISoundItem, SoundItem } from '../molecules/SoundItem';
+import { SettingOutputIcon } from "assets/icons/Icons";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Column } from "../atoms/Column";
+import { Row } from "../atoms/Row";
+import { Spacer } from "../atoms/Spacer";
+import { BreadCrumb } from "../molecules/BreadCrumb";
+import { DropdownSelect, SelectOption } from "../molecules/DropdownSelect";
+import { MySwitch } from "../molecules/MySwitch";
+import { NewRecordButton } from "../molecules/NewRecordButton";
+import { SoundItemType, SoundItem } from "../molecules/SoundItem";
 
 const GridContainer = styled.div`
   display: grid;
@@ -45,15 +45,15 @@ const HearMyselfText = styled.p`
 `;
 
 type MainGridProps = {
-  sounds: ISoundItem[];
+  sounds: SoundItemType[];
   outputs: MediaDeviceInfo[];
-  onSelected(sound?: ISoundItem): any;
-  selectedSound?: ISoundItem;
+  onSelected(sound?: SoundItemType): any;
+  selectedSound?: SoundItemType;
 };
 
 const defaultOutput: SelectOption = {
-  label: 'Default Ouput',
-  deviceId: 'default',
+  label: "Default Ouput",
+  deviceId: "default",
 };
 
 export const MainGrid: React.FC<MainGridProps> = ({
@@ -66,8 +66,6 @@ export const MainGrid: React.FC<MainGridProps> = ({
 
   const [selectedPrimaryOutput, setSelectedPrimaryOutput] =
     useState<SelectOption>(defaultOutput);
-  const [selectedSecondaryOutput, setSelectedSecondaryOutput] =
-    useState<SelectOption>(defaultOutput);
 
   const handleCheck = () => {
     setChecked((c) => !c);
@@ -75,45 +73,28 @@ export const MainGrid: React.FC<MainGridProps> = ({
 
   const handlePrimaryOutputChange = (value: SelectOption) => {
     setSelectedPrimaryOutput(value);
-    localStorage.setItem('primary_output', value.deviceId);
-  };
-
-  const handleSecondaryOutputChange = (value: SelectOption) => {
-    setSelectedSecondaryOutput(value);
-    localStorage.setItem('secondary_output', value.deviceId);
+    localStorage.setItem("primary_output", value.deviceId);
   };
 
   useEffect(() => {
     if (outputs.length === 0) return;
 
-    let output_1 = localStorage.getItem('primary_output');
+    let output_1 = localStorage.getItem("primary_output");
     if (output_1) {
       setSelectedPrimaryOutput(
         outputs.find((out) => out.deviceId === output_1) ?? defaultOutput
       );
     }
-
-    let output_2 = localStorage.getItem('secondary_output');
-    if (output_2) {
-      setSelectedSecondaryOutput(
-        outputs.find((out) => out.deviceId === output_2) ?? defaultOutput
-      );
-    }
   }, [outputs]);
 
   return (
-    <Column style={{ width: '76%' }}>
+    <Column style={{ width: "76%" }}>
       <TopSetting>
         <Row style={{ gap: 16, paddingLeft: 42 }}>
           <SettingOutputIcon />
           <DropdownSelect
             selectedValue={selectedPrimaryOutput}
             onChange={handlePrimaryOutputChange}
-            options={outputs}
-          />
-          <DropdownSelect
-            selectedValue={selectedSecondaryOutput}
-            onChange={handleSecondaryOutputChange}
             options={outputs}
           />
         </Row>
@@ -133,10 +114,7 @@ export const MainGrid: React.FC<MainGridProps> = ({
         {sounds.map((sound, index) => (
           <SoundItem
             key={index}
-            outputs={[
-              selectedPrimaryOutput.deviceId,
-              selectedSecondaryOutput.deviceId,
-            ]}
+            outputs={[selectedPrimaryOutput.deviceId]}
             sound={sound}
             onSelected={onSelected}
             isSelected={sound.source === selectedSound?.source}

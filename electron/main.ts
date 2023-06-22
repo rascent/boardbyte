@@ -8,17 +8,17 @@ import {
   ipcMain,
   Menu,
   Tray,
-} from 'electron';
+} from "electron";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
-} from 'electron-devtools-installer';
-import isDev from 'electron-is-dev';
-import { autoUpdater } from 'electron-updater';
-import { IpcMainEvent } from 'electron/main';
-import fs from 'fs';
-import mime from 'mime';
-import path from 'path';
+} from "electron-devtools-installer";
+import isDev from "electron-is-dev";
+import { autoUpdater } from "electron-updater";
+import { IpcMainEvent } from "electron/main";
+import fs from "fs";
+import mime from "mime";
+import path from "path";
 
 const fspromise = fs.promises;
 
@@ -27,7 +27,7 @@ interface Bind {
   name: string;
 }
 
-const appName: string = 'Boardbyte';
+const appName: string = "Boardbyte";
 
 export default class Main {
   static mainWindow: BrowserWindow;
@@ -38,7 +38,7 @@ export default class Main {
   static Menu: Menu;
 
   private static onWindowAllClosed() {
-    if (process.platform !== 'darwin') {
+    if (process.platform !== "darwin") {
       Main.application.quit();
     }
   }
@@ -59,46 +59,46 @@ export default class Main {
         // nodeIntegration: false,
         // contextIsolation: true,
         enableRemoteModule: true,
-        preload: path.join(__dirname, 'preload.js'),
+        preload: path.join(__dirname, "preload.js"),
       },
-      backgroundColor: '#fff',
+      backgroundColor: "#fff",
     });
     Main.mainWindow.loadURL(
       isDev
-        ? 'http://localhost:3000'
-        : `file://${path.join(__dirname, '../build/index.html')}`
+        ? "http://localhost:3000"
+        : `file://${path.join(__dirname, "../build/index.html")}`
     );
-    Main.mainWindow.on('closed', Main.onClose);
+    Main.mainWindow.on("closed", Main.onClose);
 
-    Main.mainWindow.on('minimize', (e) => {
+    Main.mainWindow.on("minimize", (e) => {
       e.preventDefault();
     });
 
     // ? Hot Reloading
     if (isDev) {
       try {
-        require('electron-reloader')(module, {
+        require("electron-reloader")(module, {
           debug: true,
           watchRenderer: true,
         });
       } catch (_) {
-        console.log('Error reloader');
+        console.log("Error reloader");
       }
     }
 
     // ? DevTools
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
       .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log('An error occurred: ', err));
+      .catch((err) => console.log("An error occurred: ", err));
 
-    const log = require('electron-log');
-    log.transports.file.level = 'debug';
+    const log = require("electron-log");
+    log.transports.file.level = "debug";
     autoUpdater.logger = log;
 
-    autoUpdater.on('error', (error) => {
+    autoUpdater.on("error", (error) => {
       dialog.showErrorBox(
-        'Error: ',
-        error === null ? 'unknown' : (error.stack || error).toString()
+        "Error: ",
+        error === null ? "unknown" : (error.stack || error).toString()
       );
     });
     if (!isDev) {
@@ -114,35 +114,35 @@ export default class Main {
       },
 
       {
-        label: 'Quit',
+        label: "Quit",
         click: function () {
           Main.application.quit();
         },
       },
-      { type: 'separator' },
+      { type: "separator" },
       {
         label: app.getVersion(),
       },
     ]);
 
-    Main.tray = new Tray(path.join(__dirname, '../public/icon.png'));
+    Main.tray = new Tray(path.join(__dirname, "../public/icon.png"));
     Main.tray.setContextMenu(contextMenu);
     Main.tray.setToolTip(appName);
-    Main.tray.addListener('click', (e) => {
+    Main.tray.addListener("click", (e) => {
       Main.mainWindow.show();
     });
   }
 
   private static listenerVersion() {
-    ipcMain.on('app/getVersion', (event) => {
+    ipcMain.on("app/getVersion", (event) => {
       if (!isDev) {
-        autoUpdater.on('update-available', (info) => {
-          event.reply('app/currentVersion', info);
+        autoUpdater.on("update-available", (info) => {
+          event.reply("app/currentVersion", info);
         });
         autoUpdater.checkForUpdates();
-        event.reply('app/currentVersion', app.getVersion());
+        event.reply("app/currentVersion", app.getVersion());
       } else {
-        event.reply('app/currentVersion', 'DEV');
+        event.reply("app/currentVersion", "DEV");
       }
     });
   }
@@ -155,11 +155,11 @@ export default class Main {
       for (const file of files) {
         let filePath = path.join(dir, file);
         if (
-          mime.getType(filePath) === 'audio/mpeg' ||
-          mime.getType(filePath) === 'audio/wav' ||
-          mime.getType(filePath) === 'audio/ogg'
+          mime.getType(filePath) === "audio/mpeg" ||
+          mime.getType(filePath) === "audio/wav" ||
+          mime.getType(filePath) === "audio/ogg"
         ) {
-          paths.push(path.join(dir, file));
+          paths.push("file://" + path.join(dir, file));
           fileNames.push(file);
         }
       }
@@ -169,7 +169,7 @@ export default class Main {
   }
 
   private static listenerListFiles() {
-    ipcMain.on('app/listFiles', (event, dir) => {
+    ipcMain.on("app/listFiles", (event, dir) => {
       this.listAudioFiles(dir).then(([paths, files]) => {
         let load = {
           dir: dir,
@@ -177,17 +177,17 @@ export default class Main {
           fileNames: files,
         };
 
-        event.sender.send('app/listedFiles', load);
+        event.sender.send("app/listedFiles", load);
       });
     });
   }
 
   private static listenerFileSelection() {
     // ? For selecting directory
-    ipcMain.handle('app/showDialog', (event, ...args) => {
+    ipcMain.handle("app/showDialog", (event, ...args) => {
       return new Promise((resolve, reject) => {
         dialog
-          .showOpenDialog({ properties: ['openDirectory'] })
+          .showOpenDialog({ properties: ["openDirectory"] })
           .then((result) => {
             let dir = result.filePaths[0];
             if (dir) {
@@ -200,7 +200,7 @@ export default class Main {
 
                 resolve(load);
 
-                event.sender.send('app/listedFiles', load);
+                event.sender.send("app/listedFiles", load);
               });
             }
           })
@@ -212,13 +212,13 @@ export default class Main {
   }
 
   private static listenerClose() {
-    ipcMain.handle('app/close', (event, ...args) => {
+    ipcMain.handle("app/close", (event, ...args) => {
       Main.mainWindow.close();
     });
   }
 
   private static listenerMin() {
-    ipcMain.handle('app/min', (event, ...args) => {
+    ipcMain.handle("app/min", (event, ...args) => {
       Main.mainWindow.hide();
     });
   }
@@ -226,10 +226,10 @@ export default class Main {
   private static listenerHotkey() {
     let bindings: Bind[] = [];
 
-    ipcMain.on('app/setkey', (event, key: string, title: string, ...args) => {
+    ipcMain.on("app/setkey", (event, key: string, title: string, ...args) => {
       let exists = false;
 
-      if (key === '') return;
+      if (key === "") return;
 
       for (let bind of bindings) {
         if (bind.name === title) {
@@ -237,7 +237,7 @@ export default class Main {
           try {
             globalShortcut.unregister(bind.key);
           } catch (e) {
-            console.log('Failed to set keybind', e);
+            console.log("Failed to set keybind", e);
           }
           bind.key = key;
         }
@@ -252,7 +252,7 @@ export default class Main {
 
       try {
         globalShortcut.register(key, () => {
-          event.reply('app/keypressed', key);
+          event.reply("app/keypressed", key);
         });
       } catch (error) {
         console.log(error);
@@ -261,27 +261,27 @@ export default class Main {
   }
 
   private static listenerRecording() {
-    ipcMain.on('app/saveRecording', async (event, data) => {
+    ipcMain.on("app/saveRecording", async (event, data) => {
       const { filePath } = await dialog.showSaveDialog({
-        buttonLabel: 'Save Audio',
+        buttonLabel: "Save Audio",
         defaultPath: `audio-${Date.now()}`,
-        filters: [{ name: 'Audio', extensions: ['wav'] }],
+        filters: [{ name: "Audio", extensions: ["wav"] }],
       });
 
       if (filePath)
         fspromise
           .writeFile(filePath, data)
-          .then(event.reply('app/saveSuccess', true))
+          .then(event.reply("app/saveSuccess", true))
           .catch((e) => console.log(e));
     });
   }
 
   private static listenerPs() {
-    ipcMain.handle('app/ps', (event, ...args) => {
+    ipcMain.handle("app/ps", (event, ...args) => {
       return new Promise((resolve, reject) => {
         desktopCapturer
           .getSources({
-            types: ['window', 'screen'],
+            types: ["window", "screen"],
             fetchWindowIcons: true,
           })
           .then((sources) => {
@@ -304,8 +304,8 @@ export default class Main {
     Main.BrowserWindow = browserWindow;
 
     Main.application = app;
-    Main.application.on('window-all-closed', Main.onWindowAllClosed);
-    Main.application.on('ready', Main.onReady);
+    Main.application.on("window-all-closed", Main.onWindowAllClosed);
+    Main.application.on("ready", Main.onReady);
 
     this.listenerFileSelection();
     this.listenerHotkey();

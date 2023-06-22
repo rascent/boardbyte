@@ -1,16 +1,14 @@
-import { MusicIcon, PencilIcon } from 'assets/icons/Icons';
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Button, ButtonType } from '../atoms/Button';
-import { Column } from '../atoms/Column';
-import { Row } from '../atoms/Row';
-import { SideNavPlaceholder } from '../atoms/SideNavPlaceholder';
-import { Spacer } from '../atoms/Spacer';
-import { KeybindInput } from '../molecules/KeybindInput';
-import { ISoundItem } from '../molecules/SoundItem';
-import { VolumeSlider } from '../molecules/VolumeSlider';
-
-const { myIpcRenderer } = window;
+import { MusicIcon, PencilIcon } from "assets/icons/Icons";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { Button, ButtonType } from "../atoms/Button";
+import { Column } from "../atoms/Column";
+import { Row } from "../atoms/Row";
+import { SideNavPlaceholder } from "../atoms/SideNavPlaceholder";
+import { Spacer } from "../atoms/Spacer";
+import { KeybindInput } from "../molecules/KeybindInput";
+import { SoundItemType } from "../molecules/SoundItem";
+import { VolumeSlider } from "../molecules/VolumeSlider";
 
 const Wrapper = styled.div`
   width: 24%;
@@ -45,22 +43,22 @@ const Title = styled.div`
 `;
 
 interface SideNavProps {
-  sound?: ISoundItem;
-  onSaveSound(sound: ISoundItem): any;
+  sound?: SoundItemType;
+  onSaveSound(sound: SoundItemType): any;
 }
 
 export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
-  const [keybind, setKeybind] = useState('');
+  const [keybind, setKeybind] = useState("");
   const [volume, setVolume] = useState(50);
   const [virtualVolume, setVirtualVolume] = useState(50);
-  const [transform, setTransform] = useState('translateX(100%)');
+  const [transform, setTransform] = useState("translateX(100%)");
 
   const registerKeybind = () => {
-    myIpcRenderer.send('app/setkey', keybind, sound?.name);
+    window.myIpcRenderer.send("app/setkey", keybind, sound?.name);
   };
 
   const unregisterKeybind = () => {
-    myIpcRenderer.send('app/setkey', '', sound?.name);
+    window.myIpcRenderer.send("app/setkey", "", sound?.name);
   };
 
   const handleSaveValue = () => {
@@ -90,14 +88,14 @@ export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
   };
 
   const handleResetDefaultValue = () => {
-    setKeybind('');
+    setKeybind("");
     setVolume(50);
     setVirtualVolume(50);
 
     onSaveSound({
       name: sound!.name,
       source: sound!.source,
-      keybind: '',
+      keybind: "",
       volume: 50,
       virtualVolume: 50,
     });
@@ -115,12 +113,12 @@ export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
 
   useEffect(() => {
     if (sound) {
-      setTransform('translateX(0)');
+      setTransform("translateX(0)");
       setVolume(sound.volume);
       setVirtualVolume(sound.virtualVolume);
       setKeybind(sound.keybind);
     } else {
-      setTransform('translateX(100%)');
+      setTransform("translateX(100%)");
     }
   }, [sound]);
 
@@ -134,13 +132,13 @@ export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
       >
         <MusicIcon />
         <Row style={{ marginTop: 24 }}>
-          <Title>{sound?.name ?? '<Sound Name>'}</Title>
+          <Title>{sound?.name ?? "<Sound Name>"}</Title>
           <PencilIcon />
         </Row>
 
         <Column
           style={{
-            width: '100%',
+            width: "100%",
             marginTop: 55,
           }}
         >
@@ -160,15 +158,15 @@ export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {
 
           <Spacer height={32} />
           <KeybindInput
-            name={sound?.name ?? ''}
-            keybind={sound?.keybind ?? ''}
+            name={sound?.name ?? ""}
+            keybind={sound?.keybind ?? ""}
             setKeybind={(value) => setKeybind(value)}
             registerKeybind={registerKeybind}
             unregisterKeybind={unregisterKeybind}
           />
           <Spacer height={61} />
 
-          <Column style={{ padding: '0px 27px', gap: 13 }}>
+          <Column style={{ padding: "0px 27px", gap: 13 }}>
             <Button
               disabled={!sound}
               type={

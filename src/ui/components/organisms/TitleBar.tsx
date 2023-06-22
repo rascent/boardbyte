@@ -3,16 +3,14 @@ import {
   SunIcon,
   WindowCloseIcon,
   WindowMinIcon,
-} from 'assets/icons/Icons';
-import { useState } from 'react';
-import styled from 'styled-components';
-import { Row } from '../atoms/Row';
-import { Spacer } from '../atoms/Spacer';
-import { IconContainer } from '../atoms/TitleBarIconContainer';
-import { LinkDropdown } from '../molecules/LinkDropdown';
-import { MySwitch } from '../molecules/MySwitch';
-
-const { myIpcRenderer } = window;
+} from "assets/icons/Icons";
+import { useState } from "react";
+import styled from "styled-components";
+import { Row } from "../atoms/Row";
+import { Spacer } from "../atoms/Spacer";
+import { IconContainer } from "../atoms/TitleBarIconContainer";
+import { LinkDropdown } from "../molecules/LinkDropdown";
+import { MySwitch } from "../molecules/MySwitch";
 
 const Container = styled(Row)`
   width: 100%;
@@ -65,11 +63,11 @@ export const TitleBar: React.FC = () => {
   };
 
   const handleClose = () => {
-    myIpcRenderer.invoke('app/close');
+    window.myIpcRenderer.invoke("app/close");
   };
 
   const handleMin = () => {
-    myIpcRenderer.invoke('app/min');
+    window.myIpcRenderer.invoke("app/min");
   };
 
   const appName: string = process.env.REACT_APP_NAME as string;
@@ -80,7 +78,7 @@ export const TitleBar: React.FC = () => {
         <Logo>{appName}</Logo>
       </LogoContainer>
       <ControlContainer>
-        <SunIcon fill={checked ? '#EAC713' : '#7E8185'} />
+        <SunIcon fill={checked ? "#EAC713" : "#7E8185"} />
         <Spacer width={4} />
         <MySwitch
           bgColor="#3691D2"

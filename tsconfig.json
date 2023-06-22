@@ -1,15 +1,8 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "types": [
-        "dom-mediacapture-record",
-        "node",
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["dom-mediacapture-record", "node"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -25,11 +18,7 @@
     "downlevelIteration": true,
     "jsx": "react-jsx",
     "baseUrl": "src",
-    "typeRoots": [
-      "src/types"
-    ]
+    "typeRoots": ["src/types"]
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
