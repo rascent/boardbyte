@@ -1,10 +1,11 @@
-import { KeyboardIcon } from 'assets/icons/Icons';
-import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { Column } from '../atoms/Column';
-import { InputLabel } from '../atoms/InputLabel';
+import { KeyboardIcon } from "assets/icons/Icons";
+import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import { Column } from "../atoms/Column";
+import { InputLabel } from "../atoms/InputLabel";
 
-import { Spacer } from '../atoms/Spacer';
+import { Spacer } from "../atoms/Spacer";
+import { useKeybind } from "hooks/useKeybind";
 
 const KeybindButton = styled.button`
   display: flex;
@@ -44,65 +45,14 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
   registerKeybind,
   unregisterKeybind,
 }) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const [keys, setKeys] = useState<string[]>([]);
-  const [buttonFocus, setButtonFocus] = useState<boolean>(false);
-
-  const addKey = (value: string) => {
-    const newKeys = [...keys, value];
-    setKeys(newKeys);
-    setKeybind(newKeys.join('+'));
-  };
-
-  const clearKeys = (value?: string) => {
-    setKeys(value === undefined ? [] : value.split('+'));
-    setKeybind(value ?? '');
-  };
-
-  const deleteKeybind = () => {
-    clearKeys();
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (!buttonFocus) return;
-
-    const keyLength = keys.length;
-
-    if (event.key === 'Escape') {
-      clearKeys(keybind);
-      return;
-    }
-
-    if (keyLength < 3) {
-      if (keys.includes(event.key)) return;
-      addKey(event.key);
-    } else {
-      setKeys([event.key]);
-      setKeybind(event.key);
-    }
-  };
-
-  const toggleButtonFocus = (focused: boolean) => {
-    if (!focused) {
-      clearKeys();
-      unregisterKeybind();
-    } else {
-      clearKeys(keybind);
-      registerKeybind();
-    }
-
-    setButtonFocus(!focused);
-  };
-
-  useEffect(() => {
-    if (name === '') return;
-    toggleButtonFocus(true);
-    setKeys(keybind.split('+'));
-  }, [name]);
-
-  useEffect(() => {
-    setKeys(keybind.split('+'));
-  }, [keybind]);
+  const {
+    keys,
+    buttonRef,
+    buttonFocus,
+    toggleButtonFocus,
+    deleteKeybind,
+    handleKeyDown,
+  } = useKeybind(name, keybind, setKeybind, registerKeybind, unregisterKeybind);
 
   return (
     <Column
@@ -111,18 +61,18 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
         marginRight: 27,
       }}
     >
-      <InputLabel style={{ cursor: 'no-drop' }} onClick={deleteKeybind}>
+      <InputLabel style={{ cursor: "no-drop" }} onClick={deleteKeybind}>
         Keybind
       </InputLabel>
       <Spacer height={12} />
       <KeybindButton
         ref={buttonRef}
-        disabled={name === ''}
-        style={{ backgroundColor: buttonFocus ? '#494d5499' : '#494d54' }}
+        disabled={name === ""}
+        style={{ backgroundColor: buttonFocus ? "#494d5499" : "#494d54" }}
         onClick={() => toggleButtonFocus(buttonFocus)}
         onKeyDown={handleKeyDown}
       >
-        <KeybindText>{keys.join('+')}</KeybindText>
+        <KeybindText>{keys.join("+")}</KeybindText>
         <KeyboardIcon />
       </KeybindButton>
     </Column>
