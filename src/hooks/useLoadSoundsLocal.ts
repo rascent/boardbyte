@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SoundItemType } from "ui/components/molecules/SoundItem";
+import { SoundItemType } from "types/sound";
 
 export const useLoadSoundsLocal = () => {
   const defaultVolume = 50;

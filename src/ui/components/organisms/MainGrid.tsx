@@ -8,7 +8,8 @@ import { BreadCrumb } from "../molecules/BreadCrumb";
 import { DropdownSelect, SelectOption } from "../molecules/DropdownSelect";
 import { MySwitch } from "../molecules/MySwitch";
 import { NewRecordButton } from "../molecules/NewRecordButton";
-import { SoundItemType, SoundItem } from "../molecules/SoundItem";
+import { SoundItemType } from "types/sound";
+import { SoundItem } from "../molecules/SoundItem";
 
 const GridContainer = styled.div`
   display: grid;
