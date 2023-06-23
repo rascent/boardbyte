@@ -1,5 +1,4 @@
 import { PauseIcon, PlayIcon } from "assets/icons/Icons";
-import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Column } from "../atoms/Column";
 import { usePlaySound } from "hooks/usePlaySound";

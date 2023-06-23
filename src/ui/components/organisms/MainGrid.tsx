@@ -1,15 +1,12 @@
-import { SettingOutputIcon } from "assets/icons/Icons";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Column } from "../atoms/Column";
-import { Row } from "../atoms/Row";
-import { Spacer } from "../atoms/Spacer";
 import { BreadCrumb } from "../molecules/BreadCrumb";
-import { DropdownSelect, SelectOption } from "../molecules/DropdownSelect";
-import { MySwitch } from "../molecules/MySwitch";
+import { SelectOption } from "../molecules/DropdownSelect";
 import { NewRecordButton } from "../molecules/NewRecordButton";
 import { SoundItemType } from "types/sound";
 import { SoundItem } from "../molecules/SoundItem";
+import { TopSetting } from "../molecules/TopSetting";
 
 const GridContainer = styled.div`
   display: grid;
@@ -30,21 +27,6 @@ const MainGridAction = styled.div`
   padding-right: 39px;
 `;
 
-const TopSetting = styled(Row)`
-  padding: 32px 0px;
-  width: 100%;
-  border-bottom: 1px solid #494d54;
-
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HearMyselfText = styled.p`
-  font-weight: 500;
-  font-size: 12px;
-  color: #f8f8f8;
-`;
-
 type MainGridProps = {
   sounds: SoundItemType[];
   outputs: MediaDeviceInfo[];
@@ -63,19 +45,8 @@ export const MainGrid: React.FC<MainGridProps> = ({
   onSelected,
   selectedSound,
 }) => {
-  const [checked, setChecked] = useState(false);
-
   const [selectedPrimaryOutput, setSelectedPrimaryOutput] =
     useState<SelectOption>(defaultOutput);
-
-  const handleCheck = () => {
-    setChecked((c) => !c);
-  };
-
-  const handlePrimaryOutputChange = (value: SelectOption) => {
-    setSelectedPrimaryOutput(value);
-    localStorage.setItem("primary_output", value.deviceId);
-  };
 
   useEffect(() => {
     if (outputs.length === 0) return;
@@ -90,21 +61,11 @@ export const MainGrid: React.FC<MainGridProps> = ({
 
   return (
     <Column style={{ width: "76%" }}>
-      <TopSetting>
-        <Row style={{ gap: 16, paddingLeft: 42 }}>
-          <SettingOutputIcon />
-          <DropdownSelect
-            selectedValue={selectedPrimaryOutput}
-            onChange={handlePrimaryOutputChange}
-            options={outputs}
-          />
-        </Row>
-        <Row style={{ paddingRight: 42 }}>
-          <HearMyselfText>Hear Myself</HearMyselfText>
-          <Spacer width={15} />
-          <MySwitch isChecked={checked} onChecked={handleCheck} />
-        </Row>
-      </TopSetting>
+      <TopSetting
+        outputs={outputs}
+        selectedPrimaryOutput={selectedPrimaryOutput}
+        setSelectedPrimaryOutput={setSelectedPrimaryOutput}
+      />
 
       <MainGridAction>
         <BreadCrumb />
