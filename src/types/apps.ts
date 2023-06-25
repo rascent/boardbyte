@@ -4,11 +4,4 @@ export interface ActiveAppProcess {
   url: string;
 }
 
-export const KNOWN_APPS = [
-  "chrome",
-  "discord",
-  "twitch",
-  "valorant",
-  "apex legends",
-  "pubg",
-];
+export const KNOWN_APPS = ['chrome', 'discord', 'twitch', 'valorant', 'apex legends', 'pubg'];

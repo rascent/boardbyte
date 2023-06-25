@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { SoundItemType } from "ui/components/molecules/SoundItem";
+import { useState, useRef, useEffect } from 'react';
+import { ExtendedAudioElement, SoundItemType } from 'types/sound';
 
 export const usePlaySound = (sound: SoundItemType, outputs: string[]) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -28,28 +28,17 @@ export const usePlaySound = (sound: SoundItemType, outputs: string[]) => {
   useEffect(() => {
     if (removeListenerRef.current) removeListenerRef.current();
 
-    removeListenerRef.current = window.myIpcRenderer.on(
-      "app/keypressed",
-      (args: string) => {
-        if (sound.keybind === args) {
-          play();
-        }
-      }
-    );
+    if (sound.playing) {
+      play();
+    }
 
-    sound.name &&
-      sound.keybind &&
-      localStorage.setItem(sound.name, sound.keybind);
+    sound.name && sound.keybind && localStorage.setItem(sound.name, sound.keybind);
   }, [sound]);
 
   useEffect(() => {
-    primaryAudioRef.current!.volume = Math.exp(
-      (Math.log(sound.volume / 100) / Math.log(10)) * 4
-    );
+    primaryAudioRef.current!.volume = Math.exp((Math.log(sound.volume / 100) / Math.log(10)) * 4);
 
-    primaryAudioRef.current!.addEventListener("ended", () =>
-      setIsPlaying(false)
-    );
+    primaryAudioRef.current!.addEventListener('ended', () => setIsPlaying(false));
 
     primaryAudioRef.current?.load();
   }, [sound]);

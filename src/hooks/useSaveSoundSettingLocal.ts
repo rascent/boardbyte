@@ -1,9 +1,7 @@
-import { useState } from "react";
-import { SoundItemType } from "ui/components/molecules/SoundItem";
+import { useState } from 'react';
+import { SoundItemType } from 'ui/components/molecules/SoundItem';
 
-export const useSaveSoundSettingLocal = (
-  setSounds: React.Dispatch<React.SetStateAction<SoundItemType[]>>
-) => {
+export const useSaveSoundSettingLocal = (setSounds: React.Dispatch<React.SetStateAction<SoundItemType[]>>) => {
   const [selectedSound, setSelectedSound] = useState<SoundItemType>();
 
   const handleSaveSound = (sound: SoundItemType) => {
@@ -17,9 +15,9 @@ export const useSaveSoundSettingLocal = (
         }
         return p;
       });
-      localStorage.setItem("sounds", JSON.stringify(modifiedSounds));
-      const dir = localStorage.getItem("dir");
-      if (dir) window.myIpcRenderer.send("app/listFiles", dir);
+      localStorage.setItem('sounds', JSON.stringify(modifiedSounds));
+      const dir = localStorage.getItem('dir');
+      if (dir) window.myIpcRenderer.send('app/listFiles', dir);
       return modifiedSounds;
     });
 

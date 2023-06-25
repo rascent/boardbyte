@@ -27,11 +27,7 @@ type VolumeSliderProps = {
   onChangeValue(value: number): any;
 };
 
-export const VolumeSlider: React.FC<VolumeSliderProps> = ({
-  title,
-  volume,
-  onChangeValue,
-}) => {
+export const VolumeSlider: React.FC<VolumeSliderProps> = ({ title, volume, onChangeValue }) => {
   return (
     <Column
       style={{

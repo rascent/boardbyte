@@ -1,106 +1,52 @@
 {
   "name": "boardbyte",
   "version": "0.1.0",
-  "private": true,
-  "homepage": "./",
-  "typings": "types.d.ts",
   "author": {
     "name": "fadilmuh22"
   },
   "dependencies": {
+    "@tauri-apps/api": "^1.4.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@types/dom-mediacapture-record": "^1.0.14",
-    "@types/electron-devtools-installer": "^2.2.2",
-    "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-is-dev": "^2.0.0",
-    "electron-log": "^4.4.8",
-    "electron-updater": "^5.3.0",
-    "ps-list-commonjs": "^8.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-input-slider": "^6.0.1",
-    "react-scripts": "5.0.1",
     "styled-components": "^5.3.6",
-    "typescript": "^4.4.2",
+    "typescript": "*",
     "usehooks-ts": "^2.9.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "react-start": "yarn compile | react-scripts start",
-    "start": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && electron build/main.js\"",
-    "winStart": "concurrently \"yarn react-start\" \"wait-on http://localhost:3000 && yarn electron .\\build\\main.js\"",
-    "electron-build": "electron-builder",
-    "compile": "tsc -p tsconfig.electron.json",
-    "compile-watch": "tsc -p tsconfig.electron.json -w",
-    "build": "react-scripts build && yarn compile",
-    "test": "react-scripts test",
-    "e-dev": "electron build/main.js",
-    "eject": "react-scripts eject",
-    "electron-pack": "electron-builder --em.main=build/main.js"
-  },
-  "build": {
-    "icon": "./public/icon.png",
-    "appId": "com.example.electron-cra",
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage"
-        }
-      ]
-    },
-    "win": {
-      "publish": [
-        "github"
-      ],
-      "target": [
-        {
-          "target": "nsis",
-          "arch": "ia32"
-        }
-      ]
-    },
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    }
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "react-hooks/exhaustive-deps": "off"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "prepare": "husky install",
+    "tauri": "tauri"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.4.0",
     "@types/styled-components": "^5.1.26",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@vitejs/plugin-react": "^4.0.1",
     "concurrently": "^7.6.0",
-    "cross-env": "^7.0.3",
-    "electron": "^22.1.0",
-    "electron-builder": "^23.6.0",
-    "electron-reloader": "^1.2.3",
+    "eslint": "^8.0.1",
+    "eslint-config-standard-with-typescript": "^35.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "husky": "^8.0.0",
+    "prettier": "^2.8.8",
+    "prettier-quick": "^0.0.5",
+    "vite": "^4.3.9",
+    "vite-plugin-checker": "^0.6.1",
+    "vite-plugin-svgr": "^3.2.0",
+    "vite-tsconfig-paths": "^4.2.0",
     "wait-on": "^7.0.1"
   }
 }

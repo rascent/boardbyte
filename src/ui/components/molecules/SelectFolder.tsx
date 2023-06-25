@@ -1,5 +1,5 @@
-import { FolderIcon } from "assets/icons/Icons";
-import styled from "styled-components";
+import { FolderIcon } from 'assets/icons/Icons';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +19,7 @@ const SelectText = styled.p`
 
 export const SelectFolder = () => {
   const handlePathSelection = () => {
-    window.myIpcRenderer.invoke("app/showDialog");
+    window.myIpcRenderer.invoke('app/showDialog');
   };
 
   return (

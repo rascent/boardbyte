@@ -1,12 +1,12 @@
-import { LinkIcon, LinkPlusIcon, TrashCanIcon } from "assets/icons/Icons";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { useOnClickOutside } from "usehooks-ts";
-import { Spacer } from "../atoms/Spacer";
-import { IconContainer } from "../atoms/TitleBarIconContainer";
-import { SearchInput } from "../atoms/SearchInput";
-import { Row } from "../atoms/Row";
-import { useLinkDropdown } from "hooks/useLinkDropdown";
+import { LinkIcon, LinkPlusIcon, TrashCanIcon } from 'assets/icons/Icons';
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { useOnClickOutside } from 'usehooks-ts';
+import { Spacer } from '../atoms/Spacer';
+import { IconContainer } from '../atoms/TitleBarIconContainer';
+import { SearchInput } from '../atoms/SearchInput';
+import { Row } from '../atoms/Row';
+import { useLinkDropdown } from 'hooks/useLinkDropdown';
 
 const Container = styled.div`
   height: 100%;
@@ -171,31 +171,20 @@ export const LinkDropdown = () => {
         <MenuContainer>
           <HeaderContainer>
             Connected
-            <Row
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsAdd((prev) => !prev)}
-            >
+            <Row style={{ cursor: 'pointer' }} onClick={() => setIsAdd((prev) => !prev)}>
               <LinkPlusIcon />
             </Row>
           </HeaderContainer>
 
-          {isAdd && (
-            <SearchInput name="query" type="text" submit={addKnownApps} />
-          )}
+          {isAdd && <SearchInput name="query" type="text" submit={addKnownApps} />}
 
           <Spacer height={12} />
 
           <ItemHeader>
             <RegisteredLabel>Registered Apps</RegisteredLabel>
-            <Row
-              style={{ cursor: "pointer" }}
-              onClick={() => setIsRemove((prev) => !prev)}
-            >
+            <Row style={{ cursor: 'pointer' }} onClick={() => setIsRemove((prev) => !prev)}>
               {!isRemove ? (
-                <TrashCanIcon
-                  fill="#7E8185"
-                  style={{ width: 16, height: 16 }}
-                />
+                <TrashCanIcon fill="#7E8185" style={{ width: 16, height: 16 }} />
               ) : (
                 <DoneLabel>Done</DoneLabel>
               )}
@@ -205,38 +194,27 @@ export const LinkDropdown = () => {
           <Spacer height={12} />
 
           <ItemsWrap>
-            {activeApps
-              .slice(0, isShowMore ? activeApps.length : 2)
-              .map((app) => (
-                <MenuItem key={app.id} onClick={() => {}}>
-                  <Row>
-                    <AppIcon src={app.url} alt="" />
-                    <Spacer width={8} />
-                    <AppLabel>{getSimpleName(app)}</AppLabel>
+            {activeApps.slice(0, isShowMore ? activeApps.length : 2).map((app) => (
+              <MenuItem key={app.id} onClick={() => {}}>
+                <Row>
+                  <AppIcon src={app.url} alt="" />
+                  <Spacer width={8} />
+                  <AppLabel>{getSimpleName(app)}</AppLabel>
+                </Row>
+                {isRemove && (
+                  <Row onClick={() => setBlacklistedApps((prev) => [...prev, app])}>
+                    <TrashCanIcon fill="#7E8185" style={{ width: 16, height: 16 }} />
                   </Row>
-                  {isRemove && (
-                    <Row
-                      onClick={() =>
-                        setBlacklistedApps((prev) => [...prev, app])
-                      }
-                    >
-                      <TrashCanIcon
-                        fill="#7E8185"
-                        style={{ width: 16, height: 16 }}
-                      />
-                    </Row>
-                  )}
-                </MenuItem>
-              ))}
+                )}
+              </MenuItem>
+            ))}
           </ItemsWrap>
 
           <Spacer height={12} />
 
           {activeApps.length > 2 && (
             <ItemFooter>
-              <ShowLabel onClick={() => setIsShowMore((prev) => !prev)}>
-                Show {!isShowMore ? "more" : "less"}
-              </ShowLabel>
+              <ShowLabel onClick={() => setIsShowMore((prev) => !prev)}>Show {!isShowMore ? 'more' : 'less'}</ShowLabel>
             </ItemFooter>
           )}
 

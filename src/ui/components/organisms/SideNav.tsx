@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { SideNavPlaceholder } from "../atoms/SideNavPlaceholder";
-import { SideNavContent } from "./SideNavContent";
-import { SoundItemType } from "types/sound";
+import styled from 'styled-components';
+import { SideNavPlaceholder } from '../atoms/SideNavPlaceholder';
+import { SideNavContent } from './SideNavContent';
+import { SoundItemType } from 'types/sound';
 
 const Wrapper = styled.div`
   width: 24%;

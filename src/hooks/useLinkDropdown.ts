@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { ActiveAppProcess, KNOWN_APPS } from "types/apps";
-import { useOnClickOutside } from "usehooks-ts";
+import { invoke } from '@tauri-apps/api';
+import { useEffect, useRef, useState } from 'react';
+import { ActiveAppProcess, KNOWN_APPS } from 'types/apps';
+import { useOnClickOutside } from 'usehooks-ts';
 
 export const useLinkDropdown = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,14 +12,12 @@ export const useLinkDropdown = () => {
   const [isAdd, setIsAdd] = useState(false);
   const [isRemove, setIsRemove] = useState(false);
   const [isShowMore, setIsShowMore] = useState(false);
-  const [blacklistedApps, setBlacklistedApps] = useState<ActiveAppProcess[]>(
-    []
-  );
+  const [blacklistedApps, setBlacklistedApps] = useState<ActiveAppProcess[]>([]);
 
   useOnClickOutside(containerRef, () => setShowLinkMenu(false));
 
   const getSimpleName = (app: ActiveAppProcess) => {
-    return knownApps.find((ka) => app.name.toLowerCase().includes(ka)) ?? "";
+    return knownApps.find((ka) => app.name.toLowerCase().includes(ka)) ?? '';
   };
 
   const addKnownApps = (value: string) => {
@@ -28,7 +27,7 @@ export const useLinkDropdown = () => {
   };
 
   useEffect(() => {
-    let localKnownApps = localStorage.getItem("known_apps");
+    let localKnownApps = localStorage.getItem('known_apps');
     if (localKnownApps) {
       setKnownApps(JSON.parse(localKnownApps));
     }
@@ -36,22 +35,23 @@ export const useLinkDropdown = () => {
 
   useEffect(() => {
     if (knownApps !== KNOWN_APPS) {
-      localStorage.setItem("known_apps", JSON.stringify(knownApps));
+      localStorage.setItem('known_apps', JSON.stringify(knownApps));
     }
   }, [knownApps]);
 
   useEffect(() => {
-    window.myIpcRenderer.invoke("app/ps").then((pl: ActiveAppProcess[]) => {
+    // TODO: tauri haven't supported desktop capturer
+    invoke('app_list').then((result) => {
+      const pl = result as ActiveAppProcess[];
+
       if (pl.length === 0) return;
 
       const knownAppProcesses = pl
         .filter(
           (p, index) =>
-            knownApps.findIndex((ka) => p.name.toLowerCase().includes(ka)) !==
-              -1 &&
+            knownApps.findIndex((ka) => p.name.toLowerCase().includes(ka)) !== -1 &&
             !blacklistedApps.find((bl) => bl.id === p.id) &&
-            pl.findIndex((item) => getSimpleName(item) === getSimpleName(p)) ===
-              index
+            pl.findIndex((item) => getSimpleName(item) === getSimpleName(p)) === index,
         )
         .sort((a, b) => getSimpleName(a).localeCompare(getSimpleName(b)));
       setActiveApps(knownAppProcesses);

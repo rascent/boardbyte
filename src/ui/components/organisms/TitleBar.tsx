@@ -1,16 +1,13 @@
-import {
-  HelpIcon,
-  SunIcon,
-  WindowCloseIcon,
-  WindowMinIcon,
-} from "assets/icons/Icons";
-import { useState } from "react";
-import styled from "styled-components";
-import { Row } from "../atoms/Row";
-import { Spacer } from "../atoms/Spacer";
-import { IconContainer } from "../atoms/TitleBarIconContainer";
-import { LinkDropdown } from "../molecules/LinkDropdown";
-import { MySwitch } from "../molecules/MySwitch";
+import { HelpIcon, SunIcon, WindowCloseIcon, WindowMinIcon } from 'assets/icons/Icons';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { Row } from '../atoms/Row';
+import { Spacer } from '../atoms/Spacer';
+import { IconContainer } from '../atoms/TitleBarIconContainer';
+import { LinkDropdown } from '../molecules/LinkDropdown';
+import { MySwitch } from '../molecules/MySwitch';
+
+import { appWindow } from '@tauri-apps/api/window';
 
 const Container = styled(Row)`
   width: 100%;
@@ -63,14 +60,14 @@ export const TitleBar: React.FC = () => {
   };
 
   const handleClose = () => {
-    window.myIpcRenderer.invoke("app/close");
+    appWindow.close();
   };
 
   const handleMin = () => {
-    window.myIpcRenderer.invoke("app/min");
+    appWindow.minimize();
   };
 
-  const appName: string = process.env.REACT_APP_NAME as string;
+  const appName: string = import.meta.env.REACT_APP_NAME;
 
   return (
     <Container>
@@ -78,16 +75,12 @@ export const TitleBar: React.FC = () => {
         <Logo>{appName}</Logo>
       </LogoContainer>
       <ControlContainer>
-        <SunIcon fill={checked ? "#EAC713" : "#7E8185"} />
+        <SunIcon fill={checked ? '#EAC713' : '#7E8185'} />
         <Spacer width={4} />
-        <MySwitch
-          bgColor="#3691D2"
-          isChecked={checked}
-          onChecked={handleCheck}
-        />
+        <MySwitch bgColor="#3691D2" isChecked={checked} onChecked={handleCheck} />
         <Spacer width={16} />
 
-        <LinkDropdown />
+        {/* <LinkDropdown /> */}
 
         <Separator />
         <IconContainer>

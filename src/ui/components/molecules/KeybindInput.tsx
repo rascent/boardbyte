@@ -1,11 +1,11 @@
-import { KeyboardIcon } from "assets/icons/Icons";
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { Column } from "../atoms/Column";
-import { InputLabel } from "../atoms/InputLabel";
+import { KeyboardIcon } from 'assets/icons/Icons';
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { Column } from '../atoms/Column';
+import { InputLabel } from '../atoms/InputLabel';
 
-import { Spacer } from "../atoms/Spacer";
-import { useKeybind } from "hooks/useKeybind";
+import { Spacer } from '../atoms/Spacer';
+import { useKeybind } from 'hooks/useKeybind';
 
 const KeybindButton = styled.button`
   display: flex;
@@ -45,14 +45,13 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
   registerKeybind,
   unregisterKeybind,
 }) => {
-  const {
-    keys,
-    buttonRef,
-    buttonFocus,
-    toggleButtonFocus,
-    deleteKeybind,
-    handleKeyDown,
-  } = useKeybind(name, keybind, setKeybind, registerKeybind, unregisterKeybind);
+  const { keys, buttonRef, buttonFocus, toggleButtonFocus, deleteKeybind, handleKeyDown } = useKeybind(
+    name,
+    keybind,
+    setKeybind,
+    registerKeybind,
+    unregisterKeybind,
+  );
 
   return (
     <Column
@@ -61,18 +60,18 @@ export const KeybindInput: React.FC<KeybindInputProps> = ({
         marginRight: 27,
       }}
     >
-      <InputLabel style={{ cursor: "no-drop" }} onClick={deleteKeybind}>
+      <InputLabel style={{ cursor: 'no-drop' }} onClick={deleteKeybind}>
         Keybind
       </InputLabel>
       <Spacer height={12} />
       <KeybindButton
         ref={buttonRef}
-        disabled={name === ""}
-        style={{ backgroundColor: buttonFocus ? "#494d5499" : "#494d54" }}
+        disabled={name === ''}
+        style={{ backgroundColor: buttonFocus ? '#494d5499' : '#494d54' }}
         onClick={() => toggleButtonFocus(buttonFocus)}
         onKeyDown={handleKeyDown}
       >
-        <KeybindText>{keys.join("+")}</KeybindText>
+        <KeybindText>{keys.join('+')}</KeybindText>
         <KeyboardIcon />
       </KeybindButton>
     </Column>

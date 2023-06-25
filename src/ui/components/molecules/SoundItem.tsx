@@ -1,8 +1,8 @@
-import { PauseIcon, PlayIcon } from "assets/icons/Icons";
-import styled from "styled-components";
-import { Column } from "../atoms/Column";
-import { usePlaySound } from "hooks/usePlaySound";
-import { SoundItemType } from "types/sound";
+import { PauseIcon, PlayIcon } from 'assets/icons/Icons';
+import styled from 'styled-components';
+import { Column } from '../atoms/Column';
+import { usePlaySound } from 'hooks/usePlaySound';
+import { SoundItemType } from 'types/sound';
 
 const Wrapper = styled(Column)`
   align-items: center;
@@ -56,12 +56,7 @@ type SoundItemProps = {
   isSelected: boolean;
 };
 
-export const SoundItem: React.FC<SoundItemProps> = ({
-  sound,
-  outputs,
-  onSelected,
-  isSelected,
-}) => {
+export const SoundItem: React.FC<SoundItemProps> = ({ sound, outputs, onSelected, isSelected }) => {
   const { primaryAudioRef, isPlaying, play } = usePlaySound(sound, outputs);
 
   return (
@@ -72,7 +67,7 @@ export const SoundItem: React.FC<SoundItemProps> = ({
           play();
         }}
         style={{
-          backgroundColor: isPlaying ? "#633CD5" : "#7E8185",
+          backgroundColor: isPlaying ? '#633CD5' : '#7E8185',
         }}
       >
         {!isPlaying ? <PlayIcon /> : <PauseIcon />}
@@ -87,9 +82,7 @@ export const SoundItem: React.FC<SoundItemProps> = ({
         }}
       >
         <Title>{sound.name}</Title>
-        <Subtitle>
-          {sound.keybind === "" ? "<Add keybind>" : sound.keybind}
-        </Subtitle>
+        <Subtitle>{sound.keybind === '' ? '<Add keybind>' : sound.keybind}</Subtitle>
       </CursorContainer>
     </Wrapper>
   );

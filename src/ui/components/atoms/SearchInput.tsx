@@ -36,11 +36,7 @@ type SearchInputProps = {
   type: string;
   submit: Function;
 };
-export const SearchInput: React.FC<SearchInputProps> = ({
-  name,
-  type,
-  submit,
-}) => {
+export const SearchInput: React.FC<SearchInputProps> = ({ name, type, submit }) => {
   const [query, setQuery] = useState<string>('');
 
   const submitHandler = () => {

@@ -27,12 +27,7 @@ const StyledButton = styled.button`
   color: #f8f8f8;
 `;
 
-export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({
-  children,
-  disabled,
-  type,
-  onClick,
-}) => {
+export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({ children, disabled, type, onClick }) => {
   return (
     <StyledButton
       disabled={disabled}

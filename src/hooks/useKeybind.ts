@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 export const useKeybind = (
   name: string,
   keybind: string,
   setKeybind: (value: string) => void,
   registerKeybind: () => any,
-  unregisterKeybind: () => any
+  unregisterKeybind: () => any,
 ) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [keys, setKeys] = useState<string[]>([]);
@@ -14,12 +14,12 @@ export const useKeybind = (
   const addKey = (value: string) => {
     const newKeys = [...keys, value];
     setKeys(newKeys);
-    setKeybind(newKeys.join("+"));
+    setKeybind(newKeys.join('+'));
   };
 
   const clearKeys = (value?: string) => {
-    setKeys(value === undefined ? [] : value.split("+"));
-    setKeybind(value ?? "");
+    setKeys(value === undefined ? [] : value.split('+'));
+    setKeybind(value ?? '');
   };
 
   const deleteKeybind = () => {
@@ -31,7 +31,7 @@ export const useKeybind = (
 
     const keyLength = keys.length;
 
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       clearKeys(keybind);
       return;
     }
@@ -58,13 +58,13 @@ export const useKeybind = (
   };
 
   useEffect(() => {
-    if (name === "") return;
+    if (name === '') return;
     toggleButtonFocus(true);
-    setKeys(keybind.split("+"));
+    setKeys(keybind.split('+'));
   }, [name]);
 
   useEffect(() => {
-    setKeys(keybind.split("+"));
+    setKeys(keybind.split('+'));
   }, [keybind]);
 
   return {

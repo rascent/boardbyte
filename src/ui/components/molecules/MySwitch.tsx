@@ -51,25 +51,16 @@ const InputCheckbox = styled.input.attrs<MySwitchStyleProps>({
           transform: translateX(25px);
           background-color: #f8f8f8;
         }
-        background-color: ${(props: MySwitchStyleProps) =>
-          props.bgColor ?? '#633CD5'};
+        background-color: ${(props: MySwitchStyleProps) => props.bgColor ?? '#633CD5'};
       }
     }
   }
 `;
 
-export const MySwitch: React.FC<MySwitchProps> = ({
-  bgColor,
-  isChecked,
-  onChecked,
-}) => {
+export const MySwitch: React.FC<MySwitchProps> = ({ bgColor, isChecked, onChecked }) => {
   return (
     <SwitchLabel>
-      <InputCheckbox
-        checked={isChecked}
-        onChange={() => onChecked()}
-        bgColor={bgColor}
-      />
+      <InputCheckbox checked={isChecked} onChange={() => onChecked()} bgColor={bgColor} />
       <SwitchSpan className="switch"></SwitchSpan>
     </SwitchLabel>
   );

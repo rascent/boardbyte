@@ -5,10 +5,7 @@ type MyInputSliderProps = {
   onChangeValue(value: number): any;
 };
 
-export const MyInputSlider: React.FC<MyInputSliderProps> = ({
-  volume,
-  onChangeValue,
-}) => {
+export const MyInputSlider: React.FC<MyInputSliderProps> = ({ volume, onChangeValue }) => {
   return (
     <InputSlider
       styles={{

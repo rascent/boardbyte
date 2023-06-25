@@ -28,3 +28,4 @@ my_signing_key.pfx
 private_key.pvk
 
 .env
+dist-ssr

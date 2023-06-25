@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Column } from "../atoms/Column";
-import { BreadCrumb } from "../molecules/BreadCrumb";
-import { SelectOption } from "../molecules/DropdownSelect";
-import { NewRecordButton } from "../molecules/NewRecordButton";
-import { SoundItemType } from "types/sound";
-import { SoundItem } from "../molecules/SoundItem";
-import { TopSetting } from "../molecules/TopSetting";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { Column } from '../atoms/Column';
+import { BreadCrumb } from '../molecules/BreadCrumb';
+import { SelectOption } from '../molecules/DropdownSelect';
+import { NewRecordButton } from '../molecules/NewRecordButton';
+import { SoundItemType } from 'types/sound';
+import { SoundItem } from '../molecules/SoundItem';
+import { TopSetting } from '../molecules/TopSetting';
 
 const GridContainer = styled.div`
   display: grid;
@@ -35,32 +35,24 @@ type MainGridProps = {
 };
 
 const defaultOutput: SelectOption = {
-  label: "Default Ouput",
-  deviceId: "default",
+  label: 'Default Ouput',
+  deviceId: 'default',
 };
 
-export const MainGrid: React.FC<MainGridProps> = ({
-  sounds,
-  outputs,
-  onSelected,
-  selectedSound,
-}) => {
-  const [selectedPrimaryOutput, setSelectedPrimaryOutput] =
-    useState<SelectOption>(defaultOutput);
+export const MainGrid: React.FC<MainGridProps> = ({ sounds, outputs, onSelected, selectedSound }) => {
+  const [selectedPrimaryOutput, setSelectedPrimaryOutput] = useState<SelectOption>(defaultOutput);
 
   useEffect(() => {
     if (outputs.length === 0) return;
 
-    let output_1 = localStorage.getItem("primary_output");
+    let output_1 = localStorage.getItem('primary_output');
     if (output_1) {
-      setSelectedPrimaryOutput(
-        outputs.find((out) => out.deviceId === output_1) ?? defaultOutput
-      );
+      setSelectedPrimaryOutput(outputs.find((out) => out.deviceId === output_1) ?? defaultOutput);
     }
   }, [outputs]);
 
   return (
-    <Column style={{ width: "76%" }}>
+    <Column style={{ width: '76%' }}>
       <TopSetting
         outputs={outputs}
         selectedPrimaryOutput={selectedPrimaryOutput}
