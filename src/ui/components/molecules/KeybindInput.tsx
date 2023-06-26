@@ -1,5 +1,4 @@
-import { KeyboardIcon } from 'assets/icons/Icons';
-import { useEffect, useRef, useState } from 'react';
+import { KeyboardIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { InputLabel } from '../atoms/InputLabel';
@@ -33,24 +32,14 @@ const KeybindText = styled.p`
 type KeybindInputProps = {
   name: string;
   keybind: string;
-  setKeybind(value: string): any;
-  registerKeybind(): any;
-  unregisterKeybind(): any;
+  setKeybind(value: string): void;
 };
 
-export const KeybindInput: React.FC<KeybindInputProps> = ({
-  name,
-  keybind,
-  setKeybind,
-  registerKeybind,
-  unregisterKeybind,
-}) => {
+export const KeybindInput: React.FC<KeybindInputProps> = ({ name, keybind, setKeybind }) => {
   const { keys, buttonRef, buttonFocus, toggleButtonFocus, deleteKeybind, handleKeyDown } = useKeybind(
     name,
     keybind,
     setKeybind,
-    registerKeybind,
-    unregisterKeybind,
   );
 
   return (

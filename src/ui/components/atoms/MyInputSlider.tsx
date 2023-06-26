@@ -2,7 +2,7 @@ import InputSlider from 'react-input-slider';
 
 type MyInputSliderProps = {
   volume: number;
-  onChangeValue(value: number): any;
+  onChangeValue: (value: number) => void;
 };
 
 export const MyInputSlider: React.FC<MyInputSliderProps> = ({ volume, onChangeValue }) => {

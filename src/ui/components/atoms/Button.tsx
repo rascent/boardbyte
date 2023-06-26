@@ -9,7 +9,7 @@ export enum ButtonType {
 type ButtonProps = {
   disabled: boolean;
   type: ButtonType;
-  onClick(): any;
+  onClick: () => void;
 };
 
 const StyledButton = styled.button`

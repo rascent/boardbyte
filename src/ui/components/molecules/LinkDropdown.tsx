@@ -1,7 +1,5 @@
-import { LinkIcon, LinkPlusIcon, TrashCanIcon } from 'assets/icons/Icons';
-import { useEffect, useRef, useState } from 'react';
+import { LinkIcon, LinkPlusIcon, TrashCanIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
-import { useOnClickOutside } from 'usehooks-ts';
 import { Spacer } from '../atoms/Spacer';
 import { IconContainer } from '../atoms/TitleBarIconContainer';
 import { SearchInput } from '../atoms/SearchInput';
@@ -88,29 +86,29 @@ const AppLabel = styled.p`
   -webkit-box-orient: vertical;
 `;
 
-const DisconnectButton = styled.div`
-  height: 34px;
-  margin-top: 12px;
+// const DisconnectButton = styled.div`
+//   height: 34px;
+//   margin-top: 12px;
 
-  gap: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+//   gap: 8px;
+//   cursor: pointer;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
 
-  font-weight: 700;
-  text-transform: capitalize;
+//   font-weight: 700;
+//   text-transform: capitalize;
 
-  border-top: 1px solid #3d4045;
-  border-radius: 0px 0px 4px 4px;
+//   border-top: 1px solid #3d4045;
+//   border-radius: 0px 0px 4px 4px;
 
-  &.connect {
-    background: #25732c;
-  }
-  &.disconnect {
-    background: #d02f2f;
-  }
-`;
+//   &.connect {
+//     background: #25732c;
+//   }
+//   &.disconnect {
+//     background: #d02f2f;
+//   }
+// `;
 
 const ItemHeader = styled(Row)`
   padding: 0px 16px;
@@ -164,14 +162,23 @@ export const LinkDropdown = () => {
 
   return (
     <Container ref={containerRef}>
-      <IconContainer onClick={() => setShowLinkMenu((s) => !s)}>
+      <IconContainer
+        onClick={() => {
+          setShowLinkMenu((s) => !s);
+        }}
+      >
         <LinkIcon />
       </IconContainer>
       {showLinkMenu && (
         <MenuContainer>
           <HeaderContainer>
             Connected
-            <Row style={{ cursor: 'pointer' }} onClick={() => setIsAdd((prev) => !prev)}>
+            <Row
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                setIsAdd((prev) => !prev);
+              }}
+            >
               <LinkPlusIcon />
             </Row>
           </HeaderContainer>
@@ -182,7 +189,12 @@ export const LinkDropdown = () => {
 
           <ItemHeader>
             <RegisteredLabel>Registered Apps</RegisteredLabel>
-            <Row style={{ cursor: 'pointer' }} onClick={() => setIsRemove((prev) => !prev)}>
+            <Row
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                setIsRemove((prev) => !prev);
+              }}
+            >
               {!isRemove ? (
                 <TrashCanIcon fill="#7E8185" style={{ width: 16, height: 16 }} />
               ) : (
@@ -195,14 +207,18 @@ export const LinkDropdown = () => {
 
           <ItemsWrap>
             {activeApps.slice(0, isShowMore ? activeApps.length : 2).map((app) => (
-              <MenuItem key={app.id} onClick={() => {}}>
+              <MenuItem key={app.id}>
                 <Row>
                   <AppIcon src={app.url} alt="" />
                   <Spacer width={8} />
                   <AppLabel>{getSimpleName(app)}</AppLabel>
                 </Row>
                 {isRemove && (
-                  <Row onClick={() => setBlacklistedApps((prev) => [...prev, app])}>
+                  <Row
+                    onClick={() => {
+                      setBlacklistedApps((prev) => [...prev, app]);
+                    }}
+                  >
                     <TrashCanIcon fill="#7E8185" style={{ width: 16, height: 16 }} />
                   </Row>
                 )}
@@ -214,7 +230,13 @@ export const LinkDropdown = () => {
 
           {activeApps.length > 2 && (
             <ItemFooter>
-              <ShowLabel onClick={() => setIsShowMore((prev) => !prev)}>Show {!isShowMore ? 'more' : 'less'}</ShowLabel>
+              <ShowLabel
+                onClick={() => {
+                  setIsShowMore((prev) => !prev);
+                }}
+              >
+                Show {!isShowMore ? 'more' : 'less'}
+              </ShowLabel>
             </ItemFooter>
           )}
 

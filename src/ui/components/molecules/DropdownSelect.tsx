@@ -1,4 +1,4 @@
-import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon } from 'assets/icons/Icons';
+import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon } from 'ui/components/atoms/Icons';
 import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useOnClickOutside } from 'usehooks-ts';
@@ -69,7 +69,14 @@ export interface SelectOption {
   deviceId: string;
 }
 
-export const DropdownSelect = ({ placeHolder, options, onChange, selectedValue }: any) => {
+interface DropdownSelectProps {
+  placeHolder: string;
+  options: SelectOption[];
+  selectedValue?: SelectOption;
+  onChange: (option: SelectOption) => void;
+}
+
+export const DropdownSelect: React.FC<DropdownSelectProps> = ({ placeHolder, options, selectedValue, onChange }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showMenu, setShowMenu] = useState(false);
 

@@ -8,10 +8,8 @@ import path from 'path';
 export default defineConfig({
   clearScreen: false,
   plugins: [
+    svgr(),
     react(),
-    svgr({
-      exportAsDefault: true,
-    }),
     checker({
       overlay: { initialIsOpen: false },
       typescript: true,

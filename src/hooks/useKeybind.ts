@@ -1,12 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export const useKeybind = (
-  name: string,
-  keybind: string,
-  setKeybind: (value: string) => void,
-  registerKeybind: () => any,
-  unregisterKeybind: () => any,
-) => {
+export const useKeybind = (name: string, keybind: string, setKeybind: (value: string) => void) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [keys, setKeys] = useState<string[]>([]);
   const [buttonFocus, setButtonFocus] = useState<boolean>(false);
@@ -48,10 +42,8 @@ export const useKeybind = (
   const toggleButtonFocus = (focused: boolean) => {
     if (!focused) {
       clearKeys();
-      unregisterKeybind();
     } else {
       clearKeys(keybind);
-      registerKeybind();
     }
 
     setButtonFocus(!focused);

@@ -3,21 +3,25 @@ import { ExtendedAudioElement, SoundItemType } from 'types/sound';
 
 export const usePlaySound = (sound: SoundItemType, outputs: string[]) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/ban-types
   const removeListenerRef = useRef<Function>();
   const primaryAudioRef = useRef<ExtendedAudioElement>(null);
 
   const setPrimaryOutput = (output: string) => {
+    if (!primaryAudioRef.current || !primaryAudioRef.current.setSinkId) return;
     primaryAudioRef.current?.setSinkId(output);
   };
 
   const play = () => {
-    if (primaryAudioRef.current?.paused) {
+    if (!primaryAudioRef.current) return;
+
+    if (primaryAudioRef.current.paused) {
       setIsPlaying(true);
-      primaryAudioRef.current?.play();
+      primaryAudioRef.current.play();
     } else {
       setIsPlaying(false);
-      primaryAudioRef.current?.pause();
-      primaryAudioRef.current!.currentTime = 0;
+      primaryAudioRef.current.pause();
+      primaryAudioRef.current.currentTime = 0;
     }
   };
 
@@ -36,11 +40,13 @@ export const usePlaySound = (sound: SoundItemType, outputs: string[]) => {
   }, [sound]);
 
   useEffect(() => {
-    primaryAudioRef.current!.volume = Math.exp((Math.log(sound.volume / 100) / Math.log(10)) * 4);
+    if (!primaryAudioRef.current) return;
 
-    primaryAudioRef.current!.addEventListener('ended', () => setIsPlaying(false));
+    primaryAudioRef.current.volume = Math.exp((Math.log(sound.volume / 100) / Math.log(10)) * 4);
 
-    primaryAudioRef.current?.load();
+    primaryAudioRef.current.addEventListener('ended', () => setIsPlaying(false));
+
+    primaryAudioRef.current.load();
   }, [sound]);
 
   return {

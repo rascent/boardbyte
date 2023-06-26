@@ -1,4 +1,4 @@
-import { SettingOutputIcon } from 'assets/icons/Icons';
+import { SettingOutputIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
 import { Row } from '../atoms/Row';
 import { Spacer } from '../atoms/Spacer';
@@ -43,7 +43,12 @@ export const TopSetting: React.FC<TopSettingProps> = ({ outputs, selectedPrimary
     <TopSettingContainer>
       <Row style={{ gap: 16, paddingLeft: 42 }}>
         <SettingOutputIcon />
-        <DropdownSelect selectedValue={selectedPrimaryOutput} onChange={handlePrimaryOutputChange} options={outputs} />
+        <DropdownSelect
+          placeHolder="Select output"
+          selectedValue={selectedPrimaryOutput}
+          onChange={handlePrimaryOutputChange}
+          options={outputs}
+        />
       </Row>
       <Row style={{ paddingRight: 42 }}>
         <HearMyselfText>Hear Myself</HearMyselfText>

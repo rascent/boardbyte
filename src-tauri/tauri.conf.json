@@ -26,6 +26,9 @@
       "window": {
         "minimize": true,
         "close": true
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -67,7 +70,7 @@
         "width": 1366,
         "height": 768,
         "resizable": true,
-        "fullscreen": true,
+        "fullscreen": false,
         "decorations": false
       }
     ]

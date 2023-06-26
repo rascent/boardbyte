@@ -1,6 +1,5 @@
-import { MusicIcon, PencilIcon } from 'assets/icons/Icons';
+import { MusicIcon, PencilIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
-import { registerKeybind, unregisterKeybind } from 'utils/keybindUtil';
 import { Button, ButtonType } from '../atoms/Button';
 import { Column } from '../atoms/Column';
 import { Row } from '../atoms/Row';
@@ -38,7 +37,7 @@ const Title = styled.div`
 
 type SideNavContentProps = {
   sound?: SoundItemType;
-  onSaveSound(sound: SoundItemType): any;
+  onSaveSound: (sound: SoundItemType) => void;
 };
 
 export const SideNavContent: React.FC<SideNavContentProps> = ({ sound, onSaveSound }) => {
@@ -50,14 +49,13 @@ export const SideNavContent: React.FC<SideNavContentProps> = ({ sound, onSaveSou
   const handleSaveValue = () => {
     if (!sound) return;
 
-    registerKeybind(keybind, sound.name);
-
     onSaveSound({
       name: sound.name,
       source: sound.source,
       keybind: keybind,
       volume: volume,
       virtualVolume: virtualVolume,
+      playing: sound.playing,
     });
   };
 
@@ -74,6 +72,7 @@ export const SideNavContent: React.FC<SideNavContentProps> = ({ sound, onSaveSou
       keybind: sound.keybind,
       volume: sound.volume,
       virtualVolume: sound.virtualVolume,
+      playing: sound.playing,
     });
   };
 
@@ -90,6 +89,7 @@ export const SideNavContent: React.FC<SideNavContentProps> = ({ sound, onSaveSou
       keybind: '',
       volume: 50,
       virtualVolume: 50,
+      playing: sound.playing,
     });
   };
 
@@ -139,8 +139,6 @@ export const SideNavContent: React.FC<SideNavContentProps> = ({ sound, onSaveSou
           name={sound?.name ?? ''}
           keybind={sound?.keybind ?? ''}
           setKeybind={(value) => setKeybind(value)}
-          registerKeybind={() => registerKeybind(keybind, sound?.name ?? '')}
-          unregisterKeybind={() => unregisterKeybind(sound?.name ?? '')}
         />
         <Spacer height={61} />
 

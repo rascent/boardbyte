@@ -1,10 +1,9 @@
-import { HelpIcon, SunIcon, WindowCloseIcon, WindowMinIcon } from 'assets/icons/Icons';
+import { HelpIcon, SunIcon, WindowCloseIcon, WindowMinIcon } from 'ui/components/atoms/Icons';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Row } from '../atoms/Row';
 import { Spacer } from '../atoms/Spacer';
 import { IconContainer } from '../atoms/TitleBarIconContainer';
-import { LinkDropdown } from '../molecules/LinkDropdown';
 import { MySwitch } from '../molecules/MySwitch';
 
 import { appWindow } from '@tauri-apps/api/window';
@@ -59,12 +58,12 @@ export const TitleBar: React.FC = () => {
     setChecked((c) => !c);
   };
 
-  const handleClose = () => {
-    appWindow.close();
+  const handleClose = async () => {
+    await appWindow.close();
   };
 
-  const handleMin = () => {
-    appWindow.minimize();
+  const handleMin = async () => {
+    await appWindow.minimize();
   };
 
   const appName: string = import.meta.env.REACT_APP_NAME;

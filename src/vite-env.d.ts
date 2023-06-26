@@ -1,3 +1,3 @@
-// eslint-disable-next-line spaced-comment
-/// <reference types="vite/client" />
-/// <reference types="vite-plugin-svgr/client" />
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as _ from 'vite/client';
+import * as _ from 'vite-plugin-svgr/client';

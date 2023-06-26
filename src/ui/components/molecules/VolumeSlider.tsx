@@ -24,7 +24,7 @@ const VolumeValue = styled.div`
 type VolumeSliderProps = {
   title: string;
   volume: number;
-  onChangeValue(value: number): any;
+  onChangeValue: (value: number) => void;
 };
 
 export const VolumeSlider: React.FC<VolumeSliderProps> = ({ title, volume, onChangeValue }) => {

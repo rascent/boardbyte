@@ -6,7 +6,6 @@ import { useOnClickOutside } from 'usehooks-ts';
 export const useLinkDropdown = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeApps, setActiveApps] = useState<ActiveAppProcess[]>([]);
-  const [isConnected, setIsConnected] = useState(false);
   const [showLinkMenu, setShowLinkMenu] = useState(false);
   const [knownApps, setKnownApps] = useState(KNOWN_APPS);
   const [isAdd, setIsAdd] = useState(false);
@@ -27,7 +26,7 @@ export const useLinkDropdown = () => {
   };
 
   useEffect(() => {
-    let localKnownApps = localStorage.getItem('known_apps');
+    const localKnownApps = localStorage.getItem('known_apps');
     if (localKnownApps) {
       setKnownApps(JSON.parse(localKnownApps));
     }

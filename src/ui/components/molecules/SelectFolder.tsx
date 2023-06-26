@@ -1,5 +1,7 @@
-import { FolderIcon } from 'assets/icons/Icons';
+import { FolderIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
+import { selectFolder } from 'utils/selectFolder';
+import { useLocalStorage } from 'usehooks-ts';
 
 const Container = styled.div`
   display: flex;
@@ -18,8 +20,13 @@ const SelectText = styled.p`
 `;
 
 export const SelectFolder = () => {
-  const handlePathSelection = () => {
-    window.myIpcRenderer.invoke('app/showDialog');
+  const [, setDir] = useLocalStorage('dir', '');
+
+  const handlePathSelection = async () => {
+    const selected = await selectFolder();
+    if (selected && !Array.isArray(selected)) {
+      setDir(selected);
+    }
   };
 
   return (

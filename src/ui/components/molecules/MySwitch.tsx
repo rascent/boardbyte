@@ -6,7 +6,7 @@ type MySwitchStyleProps = {
 
 interface MySwitchProps extends MySwitchStyleProps {
   isChecked: boolean;
-  onChecked(): any;
+  onChecked: () => void;
 }
 
 const SwitchLabel = styled.label`

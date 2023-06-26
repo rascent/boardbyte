@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 
 interface SideNavProps {
   sound?: SoundItemType;
-  onSaveSound(sound: SoundItemType): any;
+  onSaveSound: (sound: SoundItemType) => void;
 }
 
 export const SideNav: React.FC<SideNavProps> = ({ sound, onSaveSound }) => {

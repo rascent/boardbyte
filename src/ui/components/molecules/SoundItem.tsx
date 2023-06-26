@@ -1,8 +1,8 @@
-import { PauseIcon, PlayIcon } from 'assets/icons/Icons';
+import { PauseIcon, PlayIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
 import { Column } from '../atoms/Column';
 import { usePlaySound } from 'hooks/usePlaySound';
-import { SoundItemType } from 'types/sound';
+import { type SoundItemType } from 'types/sound';
 
 const Wrapper = styled(Column)`
   align-items: center;
@@ -49,19 +49,19 @@ const Subtitle = styled.p`
   color: rgba(255, 255, 255, 0.5);
 `;
 
-type SoundItemProps = {
+interface SoundItemProps {
   sound: SoundItemType;
   outputs: string[];
-  onSelected(sound?: SoundItemType): any;
+  onSelected: (sound?: SoundItemType) => void;
   isSelected: boolean;
-};
+}
 
 export const SoundItem: React.FC<SoundItemProps> = ({ sound, outputs, onSelected, isSelected }) => {
   const { primaryAudioRef, isPlaying, play } = usePlaySound(sound, outputs);
 
   return (
     <Wrapper>
-      <audio ref={primaryAudioRef} src={sound.source} />
+      <audio ref={primaryAudioRef} src={sound.source} controls />
       <PlayContainer
         onClick={() => {
           play();

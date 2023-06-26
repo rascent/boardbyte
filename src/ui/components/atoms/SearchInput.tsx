@@ -1,5 +1,5 @@
-import { MagnifyIcon } from 'assets/icons/Icons';
-import { useState } from 'react';
+import { MagnifyIcon } from 'ui/components/atoms/Icons';
+import { KeyboardEvent, useState } from 'react';
 import styled from 'styled-components';
 import { Column } from './Column';
 import { Row } from './Row';
@@ -34,9 +34,9 @@ const SearchTextField = styled.input`
 type SearchInputProps = {
   name: string;
   type: string;
-  submit: Function;
+  submit: (query: string) => void;
 };
-export const SearchInput: React.FC<SearchInputProps> = ({ name, type, submit }) => {
+export const SearchInput: React.FC<SearchInputProps> = ({ submit }) => {
   const [query, setQuery] = useState<string>('');
 
   const submitHandler = () => {
@@ -44,7 +44,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({ name, type, submit }) 
     setQuery('');
   };
 
-  const handleKeyPress = (e: any) => {
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       submitHandler();
     }

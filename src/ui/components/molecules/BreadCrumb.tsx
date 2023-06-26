@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from 'assets/icons/Icons';
+import { ChevronRightIcon } from 'ui/components/atoms/Icons';
 import styled from 'styled-components';
 import { Row } from '../atoms/Row';
 import { SelectFolder } from './SelectFolder';

@@ -30,7 +30,7 @@ const MainGridAction = styled.div`
 type MainGridProps = {
   sounds: SoundItemType[];
   outputs: MediaDeviceInfo[];
-  onSelected(sound?: SoundItemType): any;
+  onSelected: (sound?: SoundItemType) => void;
   selectedSound?: SoundItemType;
 };
 
@@ -45,7 +45,7 @@ export const MainGrid: React.FC<MainGridProps> = ({ sounds, outputs, onSelected,
   useEffect(() => {
     if (outputs.length === 0) return;
 
-    let output_1 = localStorage.getItem('primary_output');
+    const output_1 = localStorage.getItem('primary_output');
     if (output_1) {
       setSelectedPrimaryOutput(outputs.find((out) => out.deviceId === output_1) ?? defaultOutput);
     }
